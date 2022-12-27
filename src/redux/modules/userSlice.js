@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { instance } from "../../instnace/instance";
+import { instance } from "../../instance/instance";
 import { setCookie } from "../../shared/cookie";
 
 const initialState = {
