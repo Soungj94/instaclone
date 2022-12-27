@@ -44,7 +44,7 @@ export const __addPost = createAsyncThunk(
       if (response.status === 201) {
         window.alert(response.data.message);
         const { data } = await instance.get("/api/post");
-        // window.location.replace("http://localhost:3000/");
+        window.location.replace("http://localhost:3000/");
         return thunkAPI.fulfillWithValue(data);
       }
     } catch (error) {
@@ -76,7 +76,6 @@ const mainSlice = createSlice({
       state.isLoading = true;
     },
     [__getPosts.fulfilled]: (state, action) => {
-      console.log(action.payload);
       state.data = action.payload;
     },
     [__getPosts.rejected]: (state, action) => {
