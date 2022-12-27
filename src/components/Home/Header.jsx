@@ -88,7 +88,7 @@ export default Header;
 
 const StHeaderWrap = styled.div`
   background-color: white;
-  /* position: fixed; */
+  position: fixed;
   top: 0;
   width: 250px;
 `;
