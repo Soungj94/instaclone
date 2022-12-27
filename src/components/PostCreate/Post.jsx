@@ -1,36 +1,58 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
+import { __addPost } from "../../redux/modules/mainSlice";
 
 const Post = (props) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   //모달창 on / off
   const closeViewPostModal = () => {
     props.setViewPostModal(false);
   };
 
-  const [imageSrc, setImageSrc] = useState("");
-
-  const encodeFileToBase64 = (fileblob) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(fileblob);
-    return new Promise((resolve) => {
-      reader.onload = () => {
-        setImageSrc(reader.result);
-        resolve();
-      };
-    });
-  };
+  //미리보기 구현하기 위해 이미지 데이터를 받을 스테이트
+  const [imagePreview, setImagePreview] = useState([]);
+  //이미지 파일 그 자체를 받을 스테이트
+  const [imageFile, setImageFile] = useState(null);
 
   const onChangeImage = (e) => {
-    encodeFileToBase64(e.target.files[0]);
-    const img = e.target.file[0];
-    const formData = new FormData();
-    formData.append("image", img);
+    setImageFile(e.target.files[0]);
+    setImagePreview([]);
+    for (let i = 0; i < e.target.files.length; i++) {
+      if (e.target.files[i]) {
+        let reader = new FileReader();
+        reader.readAsDataURL(e.target.files[i]);
+        reader.onloadend = () => {
+          const base64 = reader.result;
+          if (base64) {
+            let base64Sub = base64.toString();
+            setImagePreview((imagePreview) => [...imagePreview, base64Sub]);
+          }
+        };
+      }
+    }
   };
+
+  //게시글 내용 input값 onchangehandler
+  const [content, setContent] = useState("");
+
+  const onChangeContentHandler = (e) => {
+    // e.preventDefault();
+    const value = e.target.value;
+    setContent(value);
+  };
+
+  //등록
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("content", content);
+    formData.append("image", imageFile);
+    dispatch(__addPost(formData));
+  };
+  console.log(content);
+  console.log(imageFile);
 
   return (
     <>
@@ -50,12 +72,17 @@ const Post = (props) => {
             </div>
             <StPostHeaderText>새 게시물 만들기</StPostHeaderText>
             <div>
-              <StPostButton>공유하기</StPostButton>
+              <StPostButton onClick={onSubmitHandler}>공유하기</StPostButton>
             </div>
           </StPostHeader>
           <StPostBody name="포스트 사진, 본문 들어갈 자리">
             <StPostImgBox>
-              {imageSrc && <StPreviewImg src={imageSrc} alt="preview-img" />}
+              {imagePreview.map((item) => {
+                return (
+                  <StPreviewImg key="{item.id}" src={item} alt="preview" />
+                );
+              })}
+              {/* {imageSrc && <StPreviewImg src={imageSrc} alt="preview-img" />} */}
               <input
                 type="file"
                 accept="image/*"
@@ -65,7 +92,12 @@ const Post = (props) => {
             </StPostImgBox>
             <StPostContent name="본문아이디, 텍스트 탭">
               <StNicknameArea>아이디 들어갈 자리</StNicknameArea>
-              <StTextArea>본문 들어갈 자리</StTextArea>
+              <StContentArea
+                type="text"
+                name="content"
+                placeholder="내용을 입력해주세요"
+                onChange={onChangeContentHandler}
+              />
             </StPostContent>
           </StPostBody>
         </StPostContainer>
@@ -98,7 +130,7 @@ const LoadEffect = keyframes`
 
 //모달창을 화면 중앙 최상단에 노출
 const StPostContainer = styled.div`
-  border: 1px solid black;
+  border: 1px solid #bdbdbd;
   border-radius: 10px;
   width: 750px;
   height: 545px;
@@ -155,23 +187,23 @@ const StPostHeader = styled.div`
 
 const StPostBody = styled.div`
   background-color: white;
-
   justify-content: space-between;
   display: flex;
-  border: 1px solid red;
+  /* border: 1px solid red; */
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
 `;
 
 const StPostImgBox = styled.div`
-  border: 1px solid white;
+  background-color: #fafafa;
+  /* border: 1px solid white; */
   height: 500px;
   width: 500px;
   border-bottom-left-radius: 10px;
 `;
 
 const StPostContent = styled.div`
-  border: 1px solid blue;
+  /* border: 1px solid blue; */
   border-bottom-right-radius: 10px;
 
   height: 500px;
@@ -179,7 +211,7 @@ const StPostContent = styled.div`
 `;
 
 const StNicknameArea = styled.div`
-  border: 1px solid purple;
+  /* border: 1px solid purple; */
   width: 240px;
   height: 30px;
   display: flex;
@@ -188,12 +220,12 @@ const StNicknameArea = styled.div`
   font-weight: bold;
 `;
 
-const StTextArea = styled.textarea`
+const StContentArea = styled.input`
   width: 90%;
-  border: 1px solid orange;
-  height: 85%;
+  border: 1px solid white;
+  height: 45%;
   margin-top: 10px;
   font-size: 15px;
   padding: 10px;
-  resize: none;
+  /* resize: none; */
 `;
