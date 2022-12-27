@@ -5,9 +5,8 @@ import styled from "styled-components";
 import { __postComment } from "../redux/modules/commentSlice";
 
 import Header from "../components/Home/Header";
-import PostCard from "../components/Home/PostCard";
 import Post from "../components/PostCreate/Post";
-import CardList from "../components/Home/CardList";
+import PostList from "../components/Home/PostList";
 
 const Home = () => {
   const [viewPostModal, setViewPostModal] = useState(false);
@@ -29,7 +28,7 @@ const Home = () => {
       <StHome>
         <Header setViewPostModal={setViewPostModal} />
         <StPostCardList>
-          <CardList />
+          <PostList />
         </StPostCardList>
         {viewPostModal && <Post setViewPostModal={setViewPostModal} />}
         <div>
