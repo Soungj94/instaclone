@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { configure } from "@testing-library/react";
+// import { configure } from "@testing-library/react";
 import axios from "axios";
 import { getCookie } from "../../shared/cookie";
 
 const instance = axios.create({
-  baseURL: "http://13.124.82.69",
+  baseURL: "https://mylee.site/",
   headers: {
     authorization: `Bearer ${getCookie("token")}`,
   },
@@ -22,6 +22,8 @@ const initialState = {
 // });
 
 //청크 사용 구역
+
+//전체 게시글 조회
 export const __getPosts = createAsyncThunk(
   "mainSlice/getPosts",
   async (payload, thunkAPI) => {
@@ -34,17 +36,14 @@ export const __getPosts = createAsyncThunk(
   }
 );
 
-//card post하는 청크
+//게시글 생성
 export const __addPost = createAsyncThunk(
   "mainSlice/addPost",
   async (payload, thunkAPI) => {
     try {
       const response = await instance.post("/api/post", payload);
-      console.log(response);
       if (response.status === 201) {
-        window.alert(response.data.message);
         const { data } = await instance.get("/api/post");
-        window.location.replace("http://localhost:3000/");
         return thunkAPI.fulfillWithValue(data);
       }
     } catch (error) {
@@ -53,25 +52,46 @@ export const __addPost = createAsyncThunk(
   }
 );
 
-//포스트 할 때 필요한 사용자 닉네임 가져오기 위해 백에 api서버하나 더만들기보다는
-//기존에 있던 게시글 상세 조회 api 사용
-// export const __getUserInfo = createAsyncThunk(
-//   "main/postCard",
-//   async(payload, thunkAPI) => {
-//     try{
-//       const res = await instance.get("api/post")
+//게시글 삭제
+export const __deletePost = createAsyncThunk(
+  "mainSlice/deletePost",
+  async (payload, thunkAPI) => {
+    try {
+      const response = await instance.delete(`/api/post/${payload}`);
+      if (response.status === 201) {
+        const { data } = await instance.get("/api/post");
+        return thunkAPI.fulfillWithValue(data);
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.errorMessage);
+    }
+  }
+);
 
-//     } catch (error) {
-//       return error
-//     }
-//   }
-// )
+//게시글 업데이트
+export const __updatePost = createAsyncThunk(
+  "mainSlice/updatePost",
+  async (payload, thunkAPI) => {
+    try {
+      const response = await instance.patch(`/api/post/${payload.id}`, {
+        content: payload.content,
+      });
+      if (response.status === 201) {
+        const { data } = await instance.get("/api/post");
+        return thunkAPI.fulfillWithValue(data);
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 
 const mainSlice = createSlice({
   name: "main",
   initialState,
   reducers: {},
   extraReducers: {
+    //게시글 조회 extraReducer
     [__getPosts.pending]: (state) => {
       state.isLoading = true;
     },
@@ -82,6 +102,7 @@ const mainSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
+    //게시글 생성 extraReducer
     [__addPost.pending]: (state) => {
       state.isLoading = true;
     },
@@ -91,6 +112,28 @@ const mainSlice = createSlice({
     },
     [__addPost.rejected]: (state, action) => {
       state.error = action.payload;
+    },
+    //게시글 삭제 extraReducer
+    [__deletePost.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__deletePost.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.data = action.payload;
+    },
+    [__deletePost.rejected]: (action) => {
+      window.alert(action.payload);
+    },
+    //게시글 수정 extraReducer
+    [__updatePost.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__updatePost.fulfilled]: (state, action) => {
+      // state.isLoading = false;
+      state.data = action.payload;
+    },
+    [__updatePost.rejected]: (action) => {
+      window.alert(action.payload);
     },
   },
 });
