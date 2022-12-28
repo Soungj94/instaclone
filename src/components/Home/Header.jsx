@@ -90,7 +90,10 @@ const StHeaderWrap = styled.div`
   background-color: white;
   position: fixed;
   top: 0;
+  left: 0;
+  bottom: 0;
   width: 250px;
+  z-index: 100;
 `;
 
 const StLogo = styled.img`
