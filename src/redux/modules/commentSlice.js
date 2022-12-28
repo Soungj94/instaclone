@@ -1,4 +1,4 @@
-import { instance } from "../../instnace/instance";
+import { instance } from "../../instance/instance";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
