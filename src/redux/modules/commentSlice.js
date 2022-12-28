@@ -1,5 +1,6 @@
 import { instance } from "../../instance/instance";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { getCookie } from "../../shared/cookie";
 
 const initialState = {
   commentList: [],
@@ -22,16 +23,26 @@ export const __getComment = createAsyncThunk(
 export const __postComment = createAsyncThunk(
   "POST_POST",
   async (payload, thunkAPI) => {
+    console.log(getCookie("token"));
     try {
-      const data = await instance.post(`/api/comment/:${payload}`, {
-        comment: payload.comment,
-      });
+      const res = await instance.post(
+        `/api/comment/${payload.id}`,
+        {
+          comment: payload.comment,
+        },
+        {
+          headers: {
+            authorization: `Bearer ${getCookie("token")}`,
+          },
+        }
+      );
+      console.log(res);
+      return thunkAPI.fulfillWithValue(payload);
     } catch (error) {
-      return thunkAPI.rejectWithValue(error);
+      return thunkAPI.rejectWithValue(error.response.data);
     }
   }
 );
-console.log("🚀 ~ file: commentSlice.js:32 ~ __postComment", __postComment);
 
 export const __patchComment = createAsyncThunk(
   "PATCH_POST",

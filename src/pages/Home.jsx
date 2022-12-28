@@ -1,28 +1,26 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
 import styled from "styled-components";
-import { __postComment } from "../redux/modules/commentSlice";
-
 import Header from "../components/Home/Header";
 import PostCard from "../components/Home/PostCard";
 import Post from "../components/PostCreate/Post";
 import CardList from "../components/Home/CardList";
+import CommentInput from "../components/Home/CommentInput";
+import CommentShown from "../components/Home/CommentShown";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { __getComment } from "../redux/modules/commentSlice";
+import { useEffect } from "react";
 
 const Home = () => {
+  const dispatch = useDispatch();
+  const { id } = useParams();
+  const { commentList } = useSelector((state) => state.commentPost);
+
   const [viewPostModal, setViewPostModal] = useState(false);
 
-  const dispatch = useDispatch();
-  const [inputC, setInputC] = useState({ comment: "" });
-  const inputChangeHandler = (e) => {
-    const { name, value } = e.target;
-    setInputC({ ...inputC, [name]: value });
-  };
-  useEffect(() => {}, [dispatch]);
-
-  const onClickInputHandler = () => {
-    dispatch(__postComment({ comment: inputC.comment }));
-  };
+  useEffect(() => {
+    dispatch(__getComment(id));
+  }, [dispatch]);
 
   return (
     <>
@@ -32,17 +30,16 @@ const Home = () => {
           <CardList />
         </StPostCardList>
         {viewPostModal && <Post setViewPostModal={setViewPostModal} />}
-        <div>
-          <input
-            type="text"
-            name="comment"
-            placeholder="댓글 달기..."
-            onChange={inputChangeHandler}
-          ></input>
-          <button type="button" onClick={onClickInputHandler}>
-            게시
-          </button>
-        </div>
+        <CommentInput id={id} />
+        {commentList?.map((el, i) => {
+          return (
+            <CommentShown
+              key={`main-comment-${i}`}
+              id={id}
+              el={el}
+            ></CommentShown>
+          );
+        })}
       </StHome>
     </>
   );
