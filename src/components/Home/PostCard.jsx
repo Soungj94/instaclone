@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 
-const PostCard = () => {
+const PostCard = ({ data }) => {
   return (
     <StPostCard name="포스트카드 전체">
       <StPostCardHeader name="포스트 카드 헤더">
         <StNicknameBox>
           <StProfileImg alt="프로필 이미지" src="img/profile_img.png" />
-          <div>닉네임 들어갈 자리</div>
+          <div>{data.nickname}</div>
         </StNicknameBox>
         <StButtonBox>
           <StButton>수정</StButton>
@@ -15,11 +15,12 @@ const PostCard = () => {
         </StButtonBox>
       </StPostCardHeader>
       <StPostCardBody name="포스트카드 바디">
-        <StPostImg alt="본 게시글 이미지" src="" />
-        <div name="좋아요 댓글 이미지버튼 들어갈 자리">
+        <StPostImg alt="본 게시글 이미지" src={data.image} />
+        <StHeartImgContainer name="좋아요 댓글 이미지버튼 들어갈 자리">
           <StHeartImg alt="좋아요 아이콘" src="img/noheart_img.png" />
           {/* <StCommentImg alt="댓글 아이콘" src="img/comment_img.png" /> */}
-        </div>
+        </StHeartImgContainer>
+        <StContent>{data.content}</StContent>
         <div name="댓글 컴포넌트 들어갈 자리">
           댓글 컴포넌트 들어갈 자리
           {/* <Comment /> <- 이런 식으로*/}
@@ -31,6 +32,19 @@ const PostCard = () => {
 
 export default PostCard;
 
+const StHeartImgContainer = styled.div`
+  margin: 0 10px 0 10px;
+  /* border: 1px solid red; */
+`;
+
+const StContent = styled.div`
+  margin: 0 10px 0 10px;
+  /* border: 1px solid green; */
+  height: 30px;
+  display: flex;
+  align-items: center;
+`;
+
 // const StCommentImg = styled.img`
 //   width: 25px;
 // `;
@@ -40,7 +54,7 @@ const StHeartImg = styled.img`
 `;
 
 const StPostImg = styled.img`
-  width: 500px;
+  width: 465px;
 `;
 
 const StButton = styled.button`
@@ -68,7 +82,7 @@ const StProfileImg = styled.img`
 `;
 
 const StPostCardHeader = styled.div`
-  border: 1px solid blue;
+  /* border: 1px solid blue; */
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -80,14 +94,14 @@ const StPostCardHeader = styled.div`
 `;
 
 const StPostCardBody = styled.div`
-  border: 1px solid black;
+  /* border: 1px solid black; */
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
 `;
 
 const StPostCard = styled.div`
   background-color: white;
-  border: 1px solid orange;
+  border: 1px solid #dfdfdf;
   border-radius: 10px;
   width: 465px;
 `;

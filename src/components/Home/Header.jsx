@@ -1,18 +1,25 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { deleteCookie, getCookie } from "../../shared/cookie";
 
 const Header = (props) => {
   const navigate = useNavigate();
 
-  // //로그인, 비로그인(쿠키속 토큰의 유무) 에 따라서 헤더 모양 달라지게 하기 위해 가져온 토큰
-  // 로컬에서 가져오는 얘는 로컬보이기용으로 임시로해놓은거임, 나중에 아랫줄 쿠키 기반으로 바꿔야함
-  const token = localStorage.getItem("token");
-  // const token = getCookie("token")
+  //로그인, 비로그인(쿠키속 토큰의 유무) 에 따라서 헤더 모양 달라지게 하기 위해 가져온 토큰
+  const token = getCookie("token");
 
-  //모달창 on / off
+  //모달창 on / off 하는 함수
+  //이 함수 실행하여 모달창 키면서 + dispatch로 사용자 닉네임 get 해와야함
   const showViewPostModal = () => {
     props.setViewPostModal(true);
+    // + dispatch로 사용자 닉네임 get 해와야함
+  };
+
+  // 로그아웃하고 새로고침하여 홈화면에 그대로 남아있게 해주는 함수
+  const logOut = () => {
+    deleteCookie("token");
+    window.location.reload();
   };
 
   return (
@@ -57,10 +64,7 @@ const Header = (props) => {
           {/* 토큰 유무에 따라 로그인/로그아웃 버튼 보여주는 태그 */}
           <StLogInOutWrap>
             {token ? (
-              <StLogInOutTextWrap
-                name="로그아웃 아이콘"
-                /*onClick={토큰 지워주는 함수 들어갈 자리}*/
-              >
+              <StLogInOutTextWrap name="로그아웃 아이콘" onClick={logOut}>
                 <StImg alt="로그아웃 아이콘" src="img/logout.png" />
                 <div>로그아웃</div>
               </StLogInOutTextWrap>
@@ -84,7 +88,7 @@ export default Header;
 
 const StHeaderWrap = styled.div`
   background-color: white;
-  /* position: fixed; */
+  position: fixed;
   top: 0;
   width: 250px;
 `;
