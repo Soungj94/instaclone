@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Header from "../components/Home/Header";
-import PostCard from "../components/Home/PostCard";
 import Post from "../components/PostCreate/Post";
+import PostList from "../components/Home/PostList";
 import CardList from "../components/Home/CardList";
 import CommentInput from "../components/Home/CommentInput";
 import CommentShown from "../components/Home/CommentShown";
@@ -27,7 +27,7 @@ const Home = () => {
       <StHome>
         <Header setViewPostModal={setViewPostModal} />
         <StPostCardList>
-          <CardList />
+          <PostList />
         </StPostCardList>
         {viewPostModal && <Post setViewPostModal={setViewPostModal} />}
         <CommentInput id={id} />
