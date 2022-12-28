@@ -3,7 +3,6 @@ import styled from "styled-components";
 import Header from "../components/Home/Header";
 import Post from "../components/PostCreate/Post";
 import PostList from "../components/Home/PostList";
-import CardList from "../components/Home/CardList";
 import CommentInput from "../components/Home/CommentInput";
 import CommentShown from "../components/Home/CommentShown";
 import { useDispatch, useSelector } from "react-redux";
