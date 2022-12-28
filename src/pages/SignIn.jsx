@@ -10,7 +10,6 @@ const SignIn = () => {
 
   //input state 초기값
   const [account, setAccount] = useState({ email: "", password: "" });
-  console.log("🚀 ~ file: SignIn.jsx:9 ~ SignIn ~ account", account);
 
   //input 이벤트 핸들러
   const onChangeAccount = (e) => {
@@ -21,13 +20,9 @@ const SignIn = () => {
   //submit 이벤트 핸들러
   const loginSubmitHandler = (e) => {
     e.preventDefault();
-    //alert("로그인 성공!");
     dispatch(__postLogin(account));
   };
-  console.log(
-    "🚀 ~ file: SignIn.jsx:21 ~ loginSubmitHandler ~ account",
-    account
-  );
+
   return (
     <StWarp>
       <StLoginWrap>
