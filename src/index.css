@@ -3,5 +3,6 @@ body {
   padding: 0;
   box-sizing: 0;
   list-style: 0;
+  font-family: "Red Hat Display", "Noto Sans KR", AppleGothic, sans-serif;
   background-color: #fafafa;
 }
