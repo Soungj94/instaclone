@@ -11,7 +11,27 @@ const instance = axios.create({
 });
 
 const initialState = {
-  posts: null,
+  posts: [
+    {
+      postId: Number,
+      userId: Number,
+      nickname: "",
+      image: "",
+      content: "",
+      comentsCount: Number,
+      likesCount: Number,
+      profileImg: "",
+      comments: [
+        {
+          postId: Number,
+          userId: Number,
+          nickname: "",
+          comment: "",
+          commentId: "",
+        },
+      ],
+    },
+  ],
 };
 
 // 서버에 요청 전달되기 전에 수행하는 작업(토큰 헤더에 보내기)
@@ -27,6 +47,7 @@ export const __getPosts = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const { data } = await instance.get("/api/post");
+      console.log(data);
       return thunkAPI.fulfillWithValue(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -49,6 +70,68 @@ export const __addPost = createAsyncThunk(
       }
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const __postComment = createAsyncThunk(
+  "POST_POST",
+  async (payload, thunkAPI) => {
+    console.log(getCookie("token"));
+    try {
+      const res = await instance.post(
+        `/api/comment/${payload.id}`,
+        {
+          comment: payload.comment,
+        },
+        {
+          headers: {
+            authorization: `Bearer ${getCookie("token")}`,
+          },
+        }
+      );
+      return thunkAPI.fulfillWithValue(payload);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const __patchComment = createAsyncThunk(
+  "PATCH_POST",
+  async (payload, thunkAPI) => {
+    try {
+      const res = await instance.patch(
+        `/api/comment/${payload.commentId}`,
+        {
+          comment: payload.comment,
+        },
+        {
+          headers: {
+            authorization: `Bearer ${getCookie("token")}`,
+          },
+        }
+      );
+      console.log(res);
+      return thunkAPI.fulfillWithValue(payload);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const __deleteComment = createAsyncThunk(
+  "DEL_POST",
+  async (payload, thunkAPI) => {
+    try {
+      const res = await instance.delete(`/api/comment/${payload.commentId}`, {
+        headers: {
+          authorization: `Bearer ${getCookie("token")}`,
+        },
+      });
+      return thunkAPI.fulfillWithValue(payload);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
     }
   }
 );
@@ -91,6 +174,72 @@ const mainSlice = createSlice({
     },
     [__addPost.rejected]: (state, action) => {
       state.error = action.payload;
+    },
+
+    //성재
+    //post
+    [__postComment.pending]: (state) => {
+      state.isLoading = true; // 네트워크 요청이 시작되면 로딩상태를 true로 변경합니다.
+    },
+    [__postComment.fulfilled]: (state, action) => {
+      state.posts = [...state.posts, { content: action.payload.comment }]; // Store에 있는 todos에 서버에서 가져온 todos를 넣습니다.
+      state.isLoading = false; // 네트워크 요청이 끝났으니, false로 변경합니다.
+      //   console.log("pt", action.payload);
+    },
+    [__postComment.rejected]: (state, action) => {
+      state.error = action.payload; // catch 된 error 객체를 state.error에 넣습니다.
+      state.isLoading = false; // 에러가 발생했지만, 네트워크 요청이 끝났으니, false로 변경합니다.
+    },
+    //patch
+    [__patchComment.pending]: (state) => {
+      state.isLoading = true; // 네트워크 요청이 시작되면 로딩상태를 true로 변경합니다.
+    },
+    [__patchComment.fulfilled]: (state, action) => {
+      state.posts = state.posts?.map((value, index) => {
+        if (value.postId === action.payload.postId) {
+          const newComment = value.comments?.map((comment, index) => {
+            if (comment.id === action.payload.commentId) {
+              return { ...comment, id: action.payload.commentId };
+            } else {
+              return comment;
+            }
+          });
+          return { ...value, comments: newComment };
+        } else {
+          return value;
+        }
+      });
+      state.isLoading = false; // 네트워크 요청이 끝났으니, false로 변경합니다.
+    },
+    [__patchComment.rejected]: (state, action) => {
+      state.error = action.payload; // catch 된 error 객체를 state.error에 넣습니다.
+      state.isLoading = false; // 에러가 발생했지만, 네트워크 요청이 끝났으니, false로 변경합니다.
+    },
+    //del
+    [__deleteComment.pending]: (state) => {
+      state.isLoading = true; // 네트워크 요청이 시작되면 로딩상태를 true로 변경합니다.
+    },
+    [__deleteComment.fulfilled]: (state, action) => {
+      state.posts = state.posts?.map((value, index) => {
+        if (value.postId === action.payload.postId) {
+          const newComment = value.comments?.filter((comment, index) => {
+            if (comment.id === action.payload.commentId) {
+              return { ...comment, id: action.payload.commentId };
+            } else {
+              return comment;
+            }
+          });
+          return { ...value, comments: newComment };
+        } else {
+          return value;
+        }
+      });
+      // Store에 있는 todos에 서버에서 가져온 todos를 넣습니다.
+      state.isLoading = false; // 네트워크 요청이 끝났으니, false로 변경합니다.
+    },
+    [__deleteComment.rejected]: (state, action) => {
+      state.error = action.payload; // catch 된 error 객체를 state.error에 넣습니다.
+      state.isLoading = false; // 에러가 발생했지만, 네트워크 요청이 끝났으니, false로 변경합니다.
     },
   },
 });

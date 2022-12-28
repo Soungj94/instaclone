@@ -3,25 +3,9 @@ import styled from "styled-components";
 import Header from "../components/Home/Header";
 import Post from "../components/PostCreate/Post";
 import PostList from "../components/Home/PostList";
-import CardList from "../components/Home/CardList";
-import CommentInput from "../components/Home/CommentInput";
-import CommentShown from "../components/Home/CommentShown";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { __getComment } from "../redux/modules/commentSlice";
-import { useEffect } from "react";
 
 const Home = () => {
-  const dispatch = useDispatch();
-  const { id } = useParams();
-  const { commentList } = useSelector((state) => state.commentPost);
-
   const [viewPostModal, setViewPostModal] = useState(false);
-
-  useEffect(() => {
-    dispatch(__getComment(id));
-  }, [dispatch]);
-
   return (
     <>
       <StHome>
@@ -30,16 +14,6 @@ const Home = () => {
           <PostList />
         </StPostCardList>
         {viewPostModal && <Post setViewPostModal={setViewPostModal} />}
-        <CommentInput id={id} />
-        {commentList?.map((el, i) => {
-          return (
-            <CommentShown
-              key={`main-comment-${i}`}
-              id={id}
-              el={el}
-            ></CommentShown>
-          );
-        })}
       </StHome>
     </>
   );

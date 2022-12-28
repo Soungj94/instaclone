@@ -9,12 +9,11 @@ const PostList = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log("postList");
     dispatch(__getPosts());
   }, [dispatch]);
 
   const { data } = useSelector((state) => state.mainSlice);
-  console.log(data?.posts);
-
   return (
     <StPostList>
       {data?.posts.map((item) => {

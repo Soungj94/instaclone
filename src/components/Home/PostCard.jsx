@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
+import CommentMain from "./CommentMain";
 
 const PostCard = ({ data }) => {
+  console.log(data.comments);
   return (
     <StPostCard name="포스트카드 전체">
       <StPostCardHeader name="포스트 카드 헤더">
@@ -21,10 +23,8 @@ const PostCard = ({ data }) => {
           {/* <StCommentImg alt="댓글 아이콘" src="img/comment_img.png" /> */}
         </StHeartImgContainer>
         <StContent>{data.content}</StContent>
-        <div name="댓글 컴포넌트 들어갈 자리">
-          댓글 컴포넌트 들어갈 자리
-          {/* <Comment /> <- 이런 식으로*/}
-        </div>
+        {/* SJ comment section */}
+        <CommentMain data={data} />
       </StPostCardBody>
     </StPostCard>
   );
