@@ -22,6 +22,8 @@ const initialState = {
 // });
 
 //청크 사용 구역
+
+//전체 게시글 조회 썽크함수
 export const __getPosts = createAsyncThunk(
   "mainSlice/getPosts",
   async (payload, thunkAPI) => {
@@ -34,7 +36,7 @@ export const __getPosts = createAsyncThunk(
   }
 );
 
-//card post하는 청크
+//card post하는 썽크
 export const __addPost = createAsyncThunk(
   "mainSlice/addPost",
   async (payload, thunkAPI) => {
