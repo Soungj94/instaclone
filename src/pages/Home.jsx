@@ -15,10 +15,11 @@ const Home = () => {
   const { id } = useParams();
   const { commentList } = useSelector((state) => state.commentPost);
 
+  //만들기(생성) 모달창 on / off
   const [viewPostModal, setViewPostModal] = useState(false);
 
   useEffect(() => {
-    dispatch(__getComment(id));
+    dispatch(__getComment());
   }, [dispatch]);
 
   return (
