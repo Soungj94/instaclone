@@ -26,9 +26,13 @@ const SignIn = () => {
   return (
     <StWarp>
       <StLoginWrap>
-        <div>
-          <img src="/img/phone.png" alt=""></img>
-        </div>
+        <StImg>
+          <img src="/img/phone.png" alt="" />
+          <StImgGif>
+            <img src="/img/screenshot1.gif" alt="" />
+          </StImgGif>
+        </StImg>
+
         <div>
           <Stbox>
             <img src="/img/logo_img.png" alt=""></img>
@@ -133,8 +137,17 @@ const Stbox1 = styled.div`
   button {
     all: unset;
     color: #0095f6;
-    font-weight: 900;
+    font-weight: 700;
     padding-left: 8px;
     cursor: pointer;
   }
+`;
+
+const StImg = styled.div`
+  position: relative;
+`;
+const StImgGif = styled.div`
+  position: absolute;
+  left: 156px;
+  top: 28px;
 `;
