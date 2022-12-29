@@ -5,7 +5,6 @@ import { __patchComment, __deleteComment } from "../../redux/modules/mainSlice";
 import styled from "styled-components";
 
 const CommentShown = ({ el, id }) => {
-  console.log("🚀 ~ file: CommentShown.jsx:12 ~ CommentShown ~ el", el);
   const dispatch = useDispatch();
 
   const [isEditing, setIsEditing] = useState(false);

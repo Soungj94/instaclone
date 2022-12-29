@@ -3,7 +3,6 @@ import styled from "styled-components";
 import CommentMain from "./CommentMain";
 
 const PostCard = ({ data }) => {
-  console.log(data.comments);
   return (
     <StPostCard name="포스트카드 전체">
       <StPostCardHeader name="포스트 카드 헤더">

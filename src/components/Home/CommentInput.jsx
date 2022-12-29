@@ -14,7 +14,7 @@ const CommentInput = ({ id }) => {
     const { name, value } = e.target;
     setInputC({ ...inputC, [name]: value });
   };
-  useEffect(() => {}, [dispatch]);
+  //   useEffect(() => {}, [inputC]);
 
   const onClickInputHandler = () => {
     const payload = { id, comment: inputC.comment };

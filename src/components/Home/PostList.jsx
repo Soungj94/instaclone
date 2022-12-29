@@ -9,7 +9,6 @@ const PostList = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("postList");
     dispatch(__getPosts());
   }, [dispatch]);
 

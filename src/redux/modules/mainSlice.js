@@ -13,18 +13,18 @@ const instance = axios.create({
 const initialState = {
   posts: [
     {
-      postId: Number,
-      userId: Number,
+      postId: 0,
+      userId: 0,
       nickname: "",
       image: "",
       content: "",
-      comentsCount: Number,
-      likesCount: Number,
+      comentsCount: 0,
+      likesCount: 0,
       profileImg: "",
       comments: [
         {
-          postId: Number,
-          userId: Number,
+          postId: 0,
+          userId: 0,
           nickname: "",
           comment: "",
           commentId: "",
@@ -46,11 +46,11 @@ export const __getPosts = createAsyncThunk(
   "mainSlice/getPosts",
   async (payload, thunkAPI) => {
     try {
-      const { data } = await instance.get("/api/post");
-      console.log(data);
-      return thunkAPI.fulfillWithValue(data);
+      const res = await instance.get("/api/post");
+      console.log(res);
+      return thunkAPI.fulfillWithValue(res.data);
     } catch (error) {
-      return thunkAPI.rejectWithValue(error);
+      return thunkAPI.rejectWithValue(error.response.data);
     }
   }
 );
@@ -90,7 +90,12 @@ export const __postComment = createAsyncThunk(
           },
         }
       );
-      return thunkAPI.fulfillWithValue(payload);
+      // if (res.status === 201) {
+      //   const data  = await instance.get("/api/post");
+      //   return thunkAPI.fulfillWithValue(data);
+      // }
+      console.log(res);
+      return thunkAPI.fulfillWithValue(res.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -112,8 +117,7 @@ export const __patchComment = createAsyncThunk(
           },
         }
       );
-      console.log(res);
-      return thunkAPI.fulfillWithValue(payload);
+      return thunkAPI.fulfillWithValue(res.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -129,7 +133,7 @@ export const __deleteComment = createAsyncThunk(
           authorization: `Bearer ${getCookie("token")}`,
         },
       });
-      return thunkAPI.fulfillWithValue(payload);
+      return thunkAPI.fulfillWithValue(res.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -183,6 +187,7 @@ const mainSlice = createSlice({
     },
     [__postComment.fulfilled]: (state, action) => {
       state.posts = [...state.posts, { content: action.payload.comment }]; // Store에 있는 todos에 서버에서 가져온 todos를 넣습니다.
+      // state.posts = action.payload;
       state.isLoading = false; // 네트워크 요청이 끝났으니, false로 변경합니다.
       //   console.log("pt", action.payload);
     },
