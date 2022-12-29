@@ -6,7 +6,7 @@ import { __addPost } from "../../redux/modules/mainSlice";
 const Post = (props) => {
   const dispatch = useDispatch();
 
-  //모달창 on / off
+  //생성 모달창 off
   const closeViewPostModal = () => {
     props.setViewPostModal(false);
   };
@@ -34,7 +34,7 @@ const Post = (props) => {
     }
   };
 
-  //게시글 내용 input값 onchangehandler
+  //게시글 내용 input값 onChangeHandler
   const [content, setContent] = useState("");
 
   const onChangeContentHandler = (e) => {
@@ -50,15 +50,14 @@ const Post = (props) => {
     formData.append("content", content);
     formData.append("image", imageFile);
     dispatch(__addPost(formData));
+    props.setViewPostModal(false);
   };
-  console.log(content);
-  console.log(imageFile);
 
   return (
     <>
       <StPostAll onClick={closeViewPostModal}>
         <StPostContainer
-          //propagation쓰면 부모 태그에게 이벤트 전파막음
+          //propagation써서 부모 태그에게 이벤트 전파막음
           onClick={(event) => event.stopPropagation()}
           name="포스트 전체 랩"
         >
@@ -128,18 +127,27 @@ const LoadEffect = keyframes`
   }
 `;
 
-//모달창을 화면 중앙 최상단에 노출
+//생성 모달창을 화면 중앙 최상단에 노출
 const StPostContainer = styled.div`
-  border: 1px solid #bdbdbd;
   border-radius: 10px;
   width: 750px;
-  height: 545px;
   //모달창 중앙배치
   position: absolute;
   top: 50%;
   left: 56%;
   transform: translate(-50%, -50%);
   animation: ${LoadEffect} 0.3s ease-in-out;
+`;
+
+const StPostHeader = styled.div`
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  background-color: white;
+  display: flex;
+  height: 40px;
+  padding: 0 10px 0 10px;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 const StPostHeaderText = styled.div`
@@ -160,6 +168,35 @@ const StPostButton = styled.button`
   }
 `;
 
+const StPostBody = styled.div`
+  background-color: white;
+  justify-content: space-between;
+  display: flex;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+`;
+
+const StPostImgBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+  width: 500px;
+  border-bottom-left-radius: 10px;
+  input[type="file"]::file-selector-button {
+    margin-left: 65px;
+    width: 120px;
+    height: 40px;
+    background: #fafafa;
+    border-radius: 10px;
+    cursor: pointer;
+    &:hover {
+      background: rgb(192, 192, 192);
+      color: #fafafa;
+    }
+  }
+`;
+
 const StPreviewImg = styled.img`
   width: 500px;
 `;
@@ -174,38 +211,8 @@ const StImg = styled.img`
   }
 `;
 
-const StPostHeader = styled.div`
-  border-top-right-radius: 10px;
-  border-top-left-radius: 10px;
-  background-color: white;
-  display: flex;
-  height: 40px;
-  padding: 0 10px 0 10px;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const StPostBody = styled.div`
-  background-color: white;
-  justify-content: space-between;
-  display: flex;
-  /* border: 1px solid red; */
-  border-bottom-right-radius: 10px;
-  border-bottom-left-radius: 10px;
-`;
-
-const StPostImgBox = styled.div`
-  background-color: #fafafa;
-  /* border: 1px solid white; */
-  height: 500px;
-  width: 500px;
-  border-bottom-left-radius: 10px;
-`;
-
 const StPostContent = styled.div`
-  /* border: 1px solid blue; */
   border-bottom-right-radius: 10px;
-
   height: 500px;
   width: 250px;
 `;
@@ -227,5 +234,4 @@ const StContentArea = styled.input`
   margin-top: 10px;
   font-size: 15px;
   padding: 10px;
-  /* resize: none; */
 `;

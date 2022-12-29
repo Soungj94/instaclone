@@ -9,7 +9,7 @@ const Header = (props) => {
   //로그인, 비로그인(쿠키속 토큰의 유무) 에 따라서 헤더 모양 달라지게 하기 위해 가져온 토큰
   const token = getCookie("token");
 
-  //모달창 on / off 하는 함수
+  //모달창 on 하는 함수
   //이 함수 실행하여 모달창 키면서 + dispatch로 사용자 닉네임 get 해와야함
   const showViewPostModal = () => {
     props.setViewPostModal(true);
@@ -90,7 +90,10 @@ const StHeaderWrap = styled.div`
   background-color: white;
   position: fixed;
   top: 0;
+  left: 0;
+  bottom: 0;
   width: 250px;
+  z-index: 100;
 `;
 
 const StLogo = styled.img`
@@ -101,7 +104,7 @@ const StHeadMenu = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 90vh;
+  height: 95vh;
   gap: 50px;
   margin: 20px 0 0 0px;
   justify-content: space-between;

@@ -4,15 +4,16 @@ import styled from "styled-components";
 import { __getPosts } from "../../redux/modules/mainSlice";
 import PostCard from "./PostCard";
 
-// 내가 등록한 글들을 나열해주는 컴포넌트
+//등록된 글들을 map으로 뿌려주는 컴포넌트
 const PostList = () => {
   const dispatch = useDispatch();
-
+  const { data } = useSelector((state) => state.mainSlice);
   useEffect(() => {
     dispatch(__getPosts());
   }, [dispatch]);
 
   const { data } = useSelector((state) => state.mainSlice);
+  
   return (
     <StPostList>
       {data?.posts.map((item) => {

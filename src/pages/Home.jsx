@@ -4,8 +4,16 @@ import Header from "../components/Home/Header";
 import Post from "../components/PostCreate/Post";
 import PostList from "../components/Home/PostList";
 
+
 const Home = () => {
+  const dispatch = useDispatch();
   const [viewPostModal, setViewPostModal] = useState(false);
+
+
+  useEffect(() => {
+    dispatch(__getComment());
+  }, [dispatch]);
+
   return (
     <>
       <StHome>
