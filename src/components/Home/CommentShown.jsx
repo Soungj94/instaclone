@@ -12,7 +12,11 @@ const CommentShown = ({ el, id }) => {
   const [inputChange, setInputChange] = useState("");
 
   const delClickHandler = (id) => {
-    dispatch(__deleteComment(id));
+    const payload = {
+      postId: el.postId,
+      commentId: el.commentId,
+    };
+    dispatch(__deleteComment(payload));
     // if (typeof bb.payload !== Number) {
     //   alert("다른 계정의 댓글을 지울 수 없습니다");
     // }

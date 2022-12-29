@@ -3,14 +3,14 @@ import React from "react";
 import CommentInput from "./CommentInput";
 import CommentShown from "./CommentShown";
 
-const CommentMain = ({ data }) => {
+const CommentMain = ({ posts }) => {
   return (
     <>
-      <CommentInput id={data.postId} />
-      {data.comments.map((el, i) => {
+      <CommentInput id={posts.postId} />
+      {posts.comments.map((el, i) => {
         return (
           <CommentShown
-            id={data.id}
+            id={posts.id}
             key={`main-comment-${i}`}
             el={el}
           ></CommentShown>

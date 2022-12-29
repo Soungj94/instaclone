@@ -48,9 +48,10 @@ export const __getPosts = createAsyncThunk(
   "mainSlice/getPosts",
   async (payload, thunkAPI) => {
     try {
+      console.log("here");
       const res = await instance.get("/api/post");
-      console.log(res);
-      return thunkAPI.fulfillWithValue(res.data);
+      console.log(res.data);
+      return thunkAPI.fulfillWithValue(res.data.posts);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -65,7 +66,7 @@ export const __addPost = createAsyncThunk(
       const response = await instance.post("/api/post", payload);
       if (response.status === 201) {
         const { data } = await instance.get("/api/post");
-        return thunkAPI.fulfillWithValue(data);
+        return thunkAPI.fulfillWithValue(data.posts);
       }
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -74,7 +75,7 @@ export const __addPost = createAsyncThunk(
 );
 
 export const __postComment = createAsyncThunk(
-  "POST_POST",
+  "mainSlice/postComment",
   async (payload, thunkAPI) => {
     console.log(getCookie("token"));
     try {
@@ -89,12 +90,11 @@ export const __postComment = createAsyncThunk(
           },
         }
       );
-      // if (res.status === 201) {
-      //   const data  = await instance.get("/api/post");
-      //   return thunkAPI.fulfillWithValue(data);
-      // }
-      console.log(res);
-      return thunkAPI.fulfillWithValue(res.data);
+      if (res.status === 201) {
+        const { data } = await instance.get("/api/post");
+        return thunkAPI.fulfillWithValue(data.posts);
+      }
+      // return thunkAPI.fulfillWithValue(res.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -102,7 +102,7 @@ export const __postComment = createAsyncThunk(
 );
 
 export const __patchComment = createAsyncThunk(
-  "PATCH_POST",
+  "mainSlice/patchComment",
   async (payload, thunkAPI) => {
     try {
       const res = await instance.patch(
@@ -116,7 +116,14 @@ export const __patchComment = createAsyncThunk(
           },
         }
       );
-      return thunkAPI.fulfillWithValue(res.data);
+      console.log(res);
+      if (res.status === 201) {
+        const { data } = await instance.patch(
+          `/api/comment/${payload.commentId}`
+        );
+        return thunkAPI.fulfillWithValue(data.posts);
+      }
+      // return thunkAPI.fulfillWithValue(res.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -124,7 +131,7 @@ export const __patchComment = createAsyncThunk(
 );
 
 export const __deleteComment = createAsyncThunk(
-  "DEL_POST",
+  "mainSlice/deleteComment",
   async (payload, thunkAPI) => {
     try {
       const res = await instance.delete(`/api/comment/${payload.commentId}`, {
@@ -132,7 +139,8 @@ export const __deleteComment = createAsyncThunk(
           authorization: `Bearer ${getCookie("token")}`,
         },
       });
-      return thunkAPI.fulfillWithValue(res.data);
+      console.log(res);
+      return thunkAPI.fulfillWithValue(payload);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -155,7 +163,7 @@ export const __deletePost = createAsyncThunk(
       const response = await instance.delete(`/api/post/${payload}`);
       if (response.status === 201) {
         const { data } = await instance.get("/api/post");
-        return thunkAPI.fulfillWithValue(data);
+        return thunkAPI.fulfillWithValue(data.posts);
       }
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.errorMessage);
@@ -171,10 +179,13 @@ export const __updatePost = createAsyncThunk(
       const response = await instance.patch(`/api/post/${payload.id}`, {
         content: payload.content,
       });
-      if (response.status === 201) {
-        const { data } = await instance.get("/api/post");
-        return thunkAPI.fulfillWithValue(data);
-      }
+      console.log(response.data);
+      // if (response.status === 201) {
+      //   const res = await instance.get("/api/post");
+      //   console.log(res.data);
+      //   return thunkAPI.fulfillWithValue(res.data);
+      // }
+      return thunkAPI.fulfillWithValue(response);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -191,7 +202,8 @@ const mainSlice = createSlice({
       state.isLoading = true;
     },
     [__getPosts.fulfilled]: (state, action) => {
-      state.data = action.payload;
+      console.log(action.payload);
+      state.posts = action.payload;
     },
     [__getPosts.rejected]: (state, action) => {
       state.isLoading = false;
@@ -203,12 +215,11 @@ const mainSlice = createSlice({
     },
     [__addPost.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.data = action.payload;
+      state.posts = action.payload;
     },
     [__addPost.rejected]: (state, action) => {
       state.error = action.payload;
     },
-
 
     //성재
     //post
@@ -216,8 +227,8 @@ const mainSlice = createSlice({
       state.isLoading = true; // 네트워크 요청이 시작되면 로딩상태를 true로 변경합니다.
     },
     [__postComment.fulfilled]: (state, action) => {
-      state.posts = [...state.posts, { content: action.payload.comment }]; // Store에 있는 todos에 서버에서 가져온 todos를 넣습니다.
-      // state.posts = action.payload;
+      // state.posts = [...state.posts, { content: action.payload.comment }]; // Store에 있는 todos에 서버에서 가져온 todos를 넣습니다.
+      state.posts = action.payload;
       state.isLoading = false; // 네트워크 요청이 끝났으니, false로 변경합니다.
       //   console.log("pt", action.payload);
     },
@@ -255,34 +266,32 @@ const mainSlice = createSlice({
       state.isLoading = true; // 네트워크 요청이 시작되면 로딩상태를 true로 변경합니다.
     },
     [__deleteComment.fulfilled]: (state, action) => {
+      console.log("dd");
       state.posts = state.posts?.map((value, index) => {
         if (value.postId === action.payload.postId) {
-          const newComment = value.comments?.filter((comment, index) => {
-            if (comment.id === action.payload.commentId) {
-              return { ...comment, id: action.payload.commentId };
-            } else {
-              return comment;
-            }
-          });
+          const newComment = value.comments?.filter(
+            (comment, index) => action.payload.commentId !== comment.commentId
+          );
           return { ...value, comments: newComment };
         } else {
           return value;
         }
       });
+      // state.data = action.payload;
       // Store에 있는 todos에 서버에서 가져온 todos를 넣습니다.
       state.isLoading = false; // 네트워크 요청이 끝났으니, false로 변경합니다.
     },
     [__deleteComment.rejected]: (state, action) => {
       state.error = action.payload; // catch 된 error 객체를 state.error에 넣습니다.
       state.isLoading = false; // 에러가 발생했지만, 네트워크 요청이 끝났으니, false로 변경합니다.
-  },
+    },
     //게시글 삭제 extraReducer
     [__deletePost.pending]: (state) => {
       state.isLoading = true;
     },
     [__deletePost.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.data = action.payload;
+      state.posts = action.payload;
     },
     [__deletePost.rejected]: (state, action) => {
       window.alert(action.payload);
@@ -293,7 +302,7 @@ const mainSlice = createSlice({
     },
     [__updatePost.fulfilled]: (state, action) => {
       // state.isLoading = false;
-      state.data = action.payload;
+      state.posts = action.payload;
     },
     [__updatePost.rejected]: (state, action) => {
       window.alert(action.payload);
