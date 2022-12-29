@@ -172,13 +172,11 @@ export const __updatePost = createAsyncThunk(
       const response = await instance.patch(`/api/post/${payload.id}`, {
         content: payload.content,
       });
-      console.log(response.data);
-      // if (response.status === 201) {
-      //   const res = await instance.get("/api/post");
-      //   console.log(res.data);
-      //   return thunkAPI.fulfillWithValue(res.data);
-      // }
-      return thunkAPI.fulfillWithValue(response);
+      if (response.status === 201) {
+        const res = await instance.get("/api/post");
+        return thunkAPI.fulfillWithValue(res.data.posts);
+      }
+      // return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }

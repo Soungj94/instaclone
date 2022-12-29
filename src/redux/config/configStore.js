@@ -6,4 +6,5 @@ import profileSlice from "../modules/profileSlice";
 
 export const store = configureStore({
   reducer: { commentPost, userSlice, mainSlice, profileSlice },
+  devTools: false,
 });

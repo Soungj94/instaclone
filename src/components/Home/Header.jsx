@@ -1,14 +1,18 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { __getMyPost } from "../../redux/modules/profileSlice";
 import { deleteCookie, getCookie } from "../../shared/cookie";
 
 const Header = (props) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   //로그인, 비로그인(쿠키속 토큰의 유무) 에 따라서 헤더 모양 달라지게 하기 위해 가져온 토큰
   const token = getCookie("token");
 
+  const res = useSelector((state) => state.profileSlice.user);
   //모달창 on 하는 함수
   //이 함수 실행하여 모달창 키면서 + dispatch로 사용자 닉네임 get 해와야함
   const showViewPostModal = () => {
@@ -20,6 +24,11 @@ const Header = (props) => {
   const logOut = () => {
     deleteCookie("token");
     window.location.reload();
+  };
+
+  const goMyPage = () => {
+    navigate(`/mypage/${res.data.nickname}`);
+    dispatch(__getMyPost(res.data.nickname));
   };
 
   return (
@@ -52,10 +61,7 @@ const Header = (props) => {
               </StImgWrap>
             ) : null}
             {token ? (
-              <StImgWrap
-                name="profile icon & 프로필"
-                onClick={() => navigate("/mypage")}
-              >
+              <StImgWrap name="profile icon & 프로필" onClick={goMyPage}>
                 <StImg alt="profile icon" src="img/profile_img.png" />
                 <div>프로필</div>
               </StImgWrap>
