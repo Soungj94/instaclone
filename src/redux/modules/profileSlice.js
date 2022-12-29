@@ -3,7 +3,7 @@ import { getCookie } from "../../shared/cookie";
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "https://mylee.site ",
+  baseURL: "https://mylee.site/",
   headers: {
     authorization: `Bearer ${getCookie("token")}`,
   },
@@ -11,13 +11,11 @@ const instance = axios.create({
 
 const initialState = { posts: null };
 
-export const __getUserInfo = createAsyncThunk(
-  "profile/getuserInfo",
+export const __tokenCheck = createAsyncThunk(
+  "profileSlice/tokenCheck",
   async (payload, thunkAPI) => {
     try {
-      const { data } = await instance.get("/api/post/:nickname", payload);
-      console.log("🚀 ~ file: profileSlice.js:20 ~ data", data);
-
+      const { data } = await instance.get("/api/auth/login/tokencheck");
       return thunkAPI.fulfillWithValue(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -43,15 +41,13 @@ const profileSlice = createSlice({
   initialState,
   reducer: {},
   extraReducers: {
-    [__getUserInfo.pending]: (state) => {
+    [__tokenCheck.pending]: (state) => {
       state.isLoading = true;
     },
-    [__getUserInfo.fulfilled]: (state, action) => {
+    [__tokenCheck.fulfilled]: (state, action) => {
       state.data = action.payload;
-      state.isLoading = false;
-      state.isLogin = true;
     },
-    [__getUserInfo.rejected]: (state, action) => {
+    [__tokenCheck.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },

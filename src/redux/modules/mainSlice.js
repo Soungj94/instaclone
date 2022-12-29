@@ -284,7 +284,7 @@ const mainSlice = createSlice({
       state.isLoading = false;
       state.data = action.payload;
     },
-    [__deletePost.rejected]: (action) => {
+    [__deletePost.rejected]: (state, action) => {
       window.alert(action.payload);
     },
     //게시글 수정 extraReducer
@@ -295,7 +295,7 @@ const mainSlice = createSlice({
       // state.isLoading = false;
       state.data = action.payload;
     },
-    [__updatePost.rejected]: (action) => {
+    [__updatePost.rejected]: (state, action) => {
       window.alert(action.payload);
     },
   },
