@@ -33,10 +33,10 @@ const CommentShown = ({ el, id }) => {
   return (
     <>
       <div>
-        <p>
-          {el.nickname}
-          {el.comment}
-        </p>
+        <StP>
+          <StNickName>{el.nickname}</StNickName>
+          <div>{el.comment}</div>
+        </StP>
       </div>
       <div>
         {isEditing && (
@@ -71,6 +71,17 @@ const CommentShown = ({ el, id }) => {
     </>
   );
 };
+
+const StNickName = styled.div`
+  font-weight: bold;
+`;
+
+const StP = styled.div`
+  display: flex;
+  flex-direction: row;
+  padding-left: 10px;
+  gap: 10px;
+`;
 
 const UpdateCommentInput = styled.input`
   width: 100%;

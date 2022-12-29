@@ -5,7 +5,6 @@ import CommentShown from "./CommentShown";
 const CommentMain = ({ posts }) => {
   return (
     <>
-      <CommentInput id={posts.postId} />
       {posts.comments.map((el, i) => {
         return (
           <CommentShown
@@ -15,6 +14,7 @@ const CommentMain = ({ posts }) => {
           ></CommentShown>
         );
       })}
+      <CommentInput id={posts.postId} />
     </>
   );
 };

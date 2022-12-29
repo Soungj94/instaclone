@@ -37,7 +37,7 @@ const InputInsta = styled.input`
   width: 90%;
   height: 30px;
   border: transparent;
-  border-radius: 5px;
+  border-radius: 10px;
 `;
 
 const ButtonInsta = styled.button`
