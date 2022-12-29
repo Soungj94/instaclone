@@ -4,15 +4,12 @@ import Header from "../components/Home/Header";
 import Post from "../components/PostCreate/Post";
 import PostList from "../components/Home/PostList";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
 import { useEffect } from "react";
-import { __getPosts } from "../redux/modules/mainSlice";
 import { __tokenCheck } from "../redux/modules/profileSlice";
 
 const Home = () => {
   const dispatch = useDispatch();
   const [viewPostModal, setViewPostModal] = useState(false);
-
 
   useEffect(() => {
     dispatch(__tokenCheck());

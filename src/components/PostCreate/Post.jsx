@@ -6,8 +6,7 @@ import { __tokenCheck } from "../../redux/modules/profileSlice";
 
 const Post = (props) => {
   const dispatch = useDispatch();
-  const { data } = useSelector((state) => state.profileSlice.data);
-  const nickForSub = data?.nickname;
+  const { data } = useSelector((state) => state.profileSlice.user);
 
   useEffect(() => {
     dispatch(__tokenCheck());
@@ -97,7 +96,7 @@ const Post = (props) => {
               />
             </StPostImgBox>
             <StPostContent name="본문아이디, 텍스트 탭">
-              <StNicknameArea>{nickForSub}</StNicknameArea>
+              <StNicknameArea>{data.nickname}</StNicknameArea>
               <StContentArea
                 type="text"
                 name="content"

@@ -8,12 +8,8 @@ import PostCard from "./PostCard";
 const PostList = () => {
   const dispatch = useDispatch();
   const { posts } = useSelector((state) => state.mainSlice);
-  console.log("🚀 ~ file: PostList.jsx:11 ~ PostList ~ posts", posts);
-  // const abc = posts.
-  // console.log(abc);
 
   useEffect(() => {
-    console.log("postList");
     dispatch(__getPosts());
   }, [dispatch]);
 

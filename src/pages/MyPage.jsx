@@ -1,25 +1,37 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { __tokenCheck, __getUserInfo } from "../redux/modules/profileSlice";
+import {
+  __tokenCheck,
+  __getUserInfo,
+  __getMyPost,
+} from "../redux/modules/profileSlice";
 import styled from "styled-components";
 import Header from "../components/Home/Header";
+import { useParams } from "react-router-dom";
 
 const MyPage = () => {
   const dispatch = useDispatch();
-  const { data } = useSelector((state) => state.profileSlice);
+  const res = useSelector((state) => state.profileSlice.user);
+  console.log(res.data);
+  // const name = res?.data.nickname;
+  // const { nickname } = useParams();
+  const myPosts = useSelector((state) => state.profileSlice.data);
+  console.log(myPosts.posts);
+  const mine = myPosts?.posts;
 
   useEffect(() => {
+    dispatch(__getMyPost(res?.data.nickname));
     dispatch(__tokenCheck());
   }, [dispatch]);
 
   return (
     <PageLayout>
-      <Header></Header>
+      <Header />
       <Stwrap>
         <img src="/img/profile1_img.png" />
         <div>
           <StNickname>
-            <h2>nickname</h2>
+            <h2>{res?.data.nickname}</h2>
             <button>프로필편집</button>
           </StNickname>
           <ul>
@@ -38,17 +50,22 @@ const MyPage = () => {
       </Stwrap>
 
       <ImgBoxWrap>
-        {/* {data?.posts.map((data) => {
+        {mine?.map((item) => {
           return (
-            <ImgBox key={data.image} data={data}>
-              <img src={data.image} />
-            </ImgBox>
+            <div key={item.postId}>
+              <StImg alt="내 게시글 미리보기" src={item.image} />
+            </div>
           );
-        })} */}
+        })}
       </ImgBoxWrap>
     </PageLayout>
   );
 };
+
+const StImg = styled.img`
+  width: 200px;
+  height: 200px;
+`;
 
 const Stwrap = styled.div`
   width: 80%;

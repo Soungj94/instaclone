@@ -6,6 +6,7 @@ import { __updatePost } from "../../redux/modules/mainSlice";
 const Update = ({ setUpdateModal, posts }) => {
   const dispatch = useDispatch();
   //수정하기(업데이트) 모달창  off
+
   const closeUpdateModal = () => {
     setUpdateModal(false);
   };
