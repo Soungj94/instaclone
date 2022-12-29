@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled, { keyframes } from "styled-components";
 import { __deletePost } from "../../redux/modules/mainSlice";
+import { __tokenCheck } from "../../redux/modules/profileSlice";
 import Update from "../Home/Update";
 
 const PostCard = ({ data }) => {
@@ -10,6 +11,7 @@ const PostCard = ({ data }) => {
   //수정하기(업데이트) 모달창 on
   const [updateModal, setUpdateModal] = useState(false);
   const showUpdateModal = () => {
+    // if(data.userId !== )
     setUpdateModal(true);
   };
 

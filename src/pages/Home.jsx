@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { __getComment } from "../redux/modules/commentSlice";
 import { useEffect } from "react";
+import { __getPosts } from "../redux/modules/mainSlice";
+import { __tokenCheck } from "../redux/modules/profileSlice";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -19,6 +21,7 @@ const Home = () => {
   const [viewPostModal, setViewPostModal] = useState(false);
 
   useEffect(() => {
+    dispatch(__tokenCheck());
     dispatch(__getComment());
   }, [dispatch]);
 

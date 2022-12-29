@@ -1,10 +1,17 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled, { keyframes } from "styled-components";
 import { __addPost } from "../../redux/modules/mainSlice";
+import { __tokenCheck } from "../../redux/modules/profileSlice";
 
 const Post = (props) => {
   const dispatch = useDispatch();
+  const { data } = useSelector((state) => state.profileSlice.data);
+  const nickForSub = data?.nickname;
+
+  useEffect(() => {
+    dispatch(__tokenCheck());
+  }, [dispatch]);
 
   //생성 모달창 off
   const closeViewPostModal = () => {
@@ -90,7 +97,7 @@ const Post = (props) => {
               />
             </StPostImgBox>
             <StPostContent name="본문아이디, 텍스트 탭">
-              <StNicknameArea>아이디 들어갈 자리</StNicknameArea>
+              <StNicknameArea>{nickForSub}</StNicknameArea>
               <StContentArea
                 type="text"
                 name="content"
@@ -136,7 +143,7 @@ const StPostContainer = styled.div`
   top: 50%;
   left: 56%;
   transform: translate(-50%, -50%);
-  animation: ${LoadEffect} 0.3s ease-in-out;
+  animation: ${LoadEffect} 0.4s ease-in-out;
 `;
 
 const StPostHeader = styled.div`

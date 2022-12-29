@@ -7,7 +7,6 @@ import { __postComment } from "../../redux/modules/commentSlice";
 const CommentInput = () => {
   const dispatch = useDispatch();
   const [inputC, setInputC] = useState({ comment: "" });
-  console.log("🚀 ~ file: Home.jsx:17 ~ Home ~ inputC", inputC);
   const inputChangeHandler = (e) => {
     const { name, value } = e.target;
     setInputC({ ...inputC, [name]: value });

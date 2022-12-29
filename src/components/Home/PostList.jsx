@@ -8,6 +8,7 @@ import PostCard from "./PostCard";
 const PostList = () => {
   const dispatch = useDispatch();
   const { data } = useSelector((state) => state.mainSlice);
+
   useEffect(() => {
     dispatch(__getPosts());
   }, [dispatch]);
