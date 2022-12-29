@@ -4,7 +4,7 @@ import axios from "axios";
 import { getCookie } from "../../shared/cookie";
 
 const instance = axios.create({
-  baseURL: "https://mylee.site/",
+  baseURL: process.env.REACT_APP_MY_API,
   headers: {
     authorization: `Bearer ${getCookie("token")}`,
   },
