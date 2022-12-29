@@ -25,7 +25,15 @@ const CommentShown = ({ el, id }) => {
     setIsEditing((prev) => !prev);
   };
   const EditClickHandler = (id) => {
-    dispatch(__patchComment(id));
+    const payload = {
+      postId: el.postId,
+      commentId: el.commentId,
+      comment: inputChange,
+    };
+
+    dispatch(__patchComment(payload)).then((res) => {
+      console.log(res);
+    });
   };
   return (
     <>
@@ -48,13 +56,13 @@ const CommentShown = ({ el, id }) => {
             />
           </>
         )}
-        <button
+        <ButtonChanger
           type="button"
           onClick={isEditing ? toggleEditing : () => delClickHandler(el)}
         >
           {isEditing ? "취소하기" : "삭제하기"}
-        </button>
-        <button
+        </ButtonChanger>
+        <ButtonChanger
           type="button"
           onClick={
             isEditing
@@ -63,7 +71,7 @@ const CommentShown = ({ el, id }) => {
           }
         >
           {isEditing ? "완료하기" : "수정하기"}
-        </button>
+        </ButtonChanger>
       </div>
     </>
   );
@@ -74,5 +82,12 @@ const UpdateCommentInput = styled.input`
   height: 30px;
   border: transparent;
   border-radius: 5px;
+`;
+const ButtonChanger = styled.button`
+  background-color: white;
+  border: none;
+  font-size: 14px;
+  font-weight: bold;
+  color: #0095f6;
 `;
 export default CommentShown;
