@@ -1,75 +1,68 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
-import { __updatePost } from "../../redux/modules/mainSlice";
 
-const Update = ({ setUpdateModal, posts }) => {
+const PostDetail = () => {
   const dispatch = useDispatch();
-  //수정하기(업데이트) 모달창  off
+  const { id } = useParams();
 
-  const closeUpdateModal = () => {
-    setUpdateModal(false);
-  };
+  // //나중에 프로필페이지에서 사진 누르면 디테일 모달창 띄워줄 코드
+  // const [showDetailModal, setShowDetailModal] = useState(false)
+  // const onClickShowDetailModal = () => {
+  //   setShowDetailModal(true)
+  // }
 
-  const [updateContent, setUpdateContent] = useState("");
-  const onChangeUpdateContentHandler = (e) => {
-    const value = e.target.value;
-    setUpdateContent(value);
-  };
-
-  const updateHandler = () => {
-    const payload = {
-      id: posts.postId,
-      content: updateContent,
-    };
-    dispatch(__updatePost(payload));
-    setUpdateModal(false);
-  };
+  // //프로필페이지의 요소들에게 붙여줘야할 디테일모달창 닫기버튼 코드
+  // const closeDetailModal = () => {
+  //   setShowDetailModal(false)
+  // }
 
   return (
     <>
-      <StUpdateAll onClick={closeUpdateModal}>
-        <StUpdateContainer
+      <StDetailAll /*onClick={closeDetailModal}*/>
+        <StDetailContainer
           //propagation써서 부모 태그에게 이벤트 전파막음
           onClick={(event) => event.stopPropagation()}
           name="포스트 전체 랩"
         >
-          <StUpdateHeader name="포스트 헤더 탭">
+          <StDetailHeader name="포스트 헤더 탭">
             <div name="뒤로가기버튼">
               <StImg
                 alt="go main button"
                 src="img/back.png"
-                onClick={closeUpdateModal}
+                // onClick={closeDetailModal}
               />
             </div>
-            <StUpdateHeaderText>게시글 수정</StUpdateHeaderText>
+            <StDetailHeaderText>게시글 수정</StDetailHeaderText>
             <div>
-              <StUpdateButton onClick={updateHandler}>수정하기</StUpdateButton>
+              <StDetailButton /*onClick={updateHandler}*/>수정</StDetailButton>
+              <StDetailButton /*onClick={updateHandler}*/>삭제</StDetailButton>
             </div>
-          </StUpdateHeader>
-          <StUpdateBody name="포스트 사진, 본문 들어갈 자리">
-            <StUpdateImgBox>
-              <StPreviewImg alt="업데이트박스 이미지" src={posts.image} />
-            </StUpdateImgBox>
-            <StUpdateContent name="본문아이디, 텍스트 탭">
-              <StNicknameArea>{posts.nickname}</StNicknameArea>
+          </StDetailHeader>
+          <StDetailBody name="포스트 사진, 본문 들어갈 자리">
+            <StDetailImgBox>
+              <StPreviewImg alt="업데이트박스 이미지" /*src={data.image}*/ />
+            </StDetailImgBox>
+            <StDetailContent name="본문아이디, 텍스트 탭">
+              <StNicknameArea>내 게시글 내 닉네임 들어갈 자리</StNicknameArea>
               <StTextArea
                 type="text"
                 name="updateContent"
-                defaultValue={posts.content}
-                onChange={onChangeUpdateContentHandler}
+                // defaultValue={data.content}
+                // onChange={onChangeUpdateContentHandler}
               ></StTextArea>
-            </StUpdateContent>
-          </StUpdateBody>
-        </StUpdateContainer>
-      </StUpdateAll>
+            </StDetailContent>
+          </StDetailBody>
+        </StDetailContainer>
+      </StDetailAll>
     </>
   );
 };
 
-export default Update;
+export default PostDetail;
 
-const StUpdateAll = styled.div`
+const StDetailAll = styled.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -90,7 +83,7 @@ const LoadEffect = keyframes`
 `;
 
 //업데이트 모달창을 화면 중앙 최상단에 노출
-const StUpdateContainer = styled.div`
+const StDetailContainer = styled.div`
   border-radius: 10px;
   width: 750px;
   /* height: 545px; */
@@ -102,11 +95,11 @@ const StUpdateContainer = styled.div`
   animation: ${LoadEffect} 0.3s ease-in-out;
 `;
 
-const StUpdateHeaderText = styled.div`
+const StDetailHeaderText = styled.div`
   font-weight: bold;
 `;
 
-const StUpdateButton = styled.button`
+const StDetailButton = styled.button`
   background-color: white;
   border: none;
   font-size: 14px;
@@ -134,7 +127,7 @@ const StImg = styled.img`
   }
 `;
 
-const StUpdateHeader = styled.div`
+const StDetailHeader = styled.div`
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
   background-color: white;
@@ -145,7 +138,7 @@ const StUpdateHeader = styled.div`
   justify-content: space-between;
 `;
 
-const StUpdateBody = styled.div`
+const StDetailBody = styled.div`
   background-color: white;
   justify-content: space-between;
   display: flex;
@@ -153,7 +146,7 @@ const StUpdateBody = styled.div`
   border-bottom-left-radius: 10px;
 `;
 
-const StUpdateImgBox = styled.div`
+const StDetailImgBox = styled.div`
   display: flex;
   align-items: center;
   background-color: black;
@@ -161,7 +154,7 @@ const StUpdateImgBox = styled.div`
   border-bottom-left-radius: 10px;
 `;
 
-const StUpdateContent = styled.div`
+const StDetailContent = styled.div`
   border-bottom-right-radius: 10px;
   height: 500px;
   width: 250px;

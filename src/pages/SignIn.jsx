@@ -10,7 +10,6 @@ const SignIn = () => {
 
   //input state 초기값
   const [account, setAccount] = useState({ email: "", password: "" });
-  console.log("🚀 ~ file: SignIn.jsx:9 ~ SignIn ~ account", account);
 
   //input 이벤트 핸들러
   const onChangeAccount = (e) => {
@@ -21,19 +20,19 @@ const SignIn = () => {
   //submit 이벤트 핸들러
   const loginSubmitHandler = (e) => {
     e.preventDefault();
-    //alert("로그인 성공!");
     dispatch(__postLogin(account));
   };
-  console.log(
-    "🚀 ~ file: SignIn.jsx:21 ~ loginSubmitHandler ~ account",
-    account
-  );
+
   return (
     <StWarp>
       <StLoginWrap>
-        <div>
-          <img src="/img/phone.png" alt=""></img>
-        </div>
+        <StImg>
+          <img src="/img/phone.png" alt="" />
+          <StImgGif>
+            <img src="/img/screenshot1.gif" alt="" />
+          </StImgGif>
+        </StImg>
+
         <div>
           <Stbox>
             <img src="/img/logo_img.png" alt=""></img>
@@ -138,8 +137,17 @@ const Stbox1 = styled.div`
   button {
     all: unset;
     color: #0095f6;
-    font-weight: 900;
+    font-weight: 700;
     padding-left: 8px;
     cursor: pointer;
   }
+`;
+
+const StImg = styled.div`
+  position: relative;
+`;
+const StImgGif = styled.div`
+  position: absolute;
+  left: 156px;
+  top: 28px;
 `;

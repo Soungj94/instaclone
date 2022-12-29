@@ -1,42 +1,69 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled, { keyframes } from "styled-components";
+import { __addPost } from "../../redux/modules/mainSlice";
+import { __tokenCheck } from "../../redux/modules/profileSlice";
 
 const Post = (props) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const { data } = useSelector((state) => state.profileSlice.user);
 
-  //모달창 on / off
+  useEffect(() => {
+    dispatch(__tokenCheck());
+  }, [dispatch]);
+
+  //생성 모달창 off
   const closeViewPostModal = () => {
     props.setViewPostModal(false);
   };
 
-  const [imageSrc, setImageSrc] = useState("");
-
-  const encodeFileToBase64 = (fileblob) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(fileblob);
-    return new Promise((resolve) => {
-      reader.onload = () => {
-        setImageSrc(reader.result);
-        resolve();
-      };
-    });
-  };
+  //미리보기 구현하기 위해 이미지 데이터를 받을 스테이트
+  const [imagePreview, setImagePreview] = useState([]);
+  //이미지 파일 그 자체를 받을 스테이트
+  const [imageFile, setImageFile] = useState(null);
 
   const onChangeImage = (e) => {
-    encodeFileToBase64(e.target.files[0]);
-    const img = e.target.file[0];
+    setImageFile(e.target.files[0]);
+    setImagePreview([]);
+    for (let i = 0; i < e.target.files.length; i++) {
+      if (e.target.files[i]) {
+        let reader = new FileReader();
+        reader.readAsDataURL(e.target.files[i]);
+        reader.onloadend = () => {
+          const base64 = reader.result;
+          if (base64) {
+            let base64Sub = base64.toString();
+            setImagePreview((imagePreview) => [...imagePreview, base64Sub]);
+          }
+        };
+      }
+    }
+  };
+
+  //게시글 내용 input값 onChangeHandler
+  const [content, setContent] = useState("");
+
+  const onChangeContentHandler = (e) => {
+    // e.preventDefault();
+    const value = e.target.value;
+    setContent(value);
+  };
+
+  //등록
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
     const formData = new FormData();
-    formData.append("image", img);
+    formData.append("content", content);
+    formData.append("image", imageFile);
+    dispatch(__addPost(formData));
+    props.setViewPostModal(false);
   };
 
   return (
     <>
       <StPostAll onClick={closeViewPostModal}>
         <StPostContainer
-          //propagation쓰면 부모 태그에게 이벤트 전파막음
+          //propagation써서 부모 태그에게 이벤트 전파막음
           onClick={(event) => event.stopPropagation()}
           name="포스트 전체 랩"
         >
@@ -50,12 +77,17 @@ const Post = (props) => {
             </div>
             <StPostHeaderText>새 게시물 만들기</StPostHeaderText>
             <div>
-              <StPostButton>공유하기</StPostButton>
+              <StPostButton onClick={onSubmitHandler}>공유하기</StPostButton>
             </div>
           </StPostHeader>
           <StPostBody name="포스트 사진, 본문 들어갈 자리">
             <StPostImgBox>
-              {imageSrc && <StPreviewImg src={imageSrc} alt="preview-img" />}
+              {imagePreview.map((item) => {
+                return (
+                  <StPreviewImg key="{item.id}" src={item} alt="preview" />
+                );
+              })}
+              {/* {imageSrc && <StPreviewImg src={imageSrc} alt="preview-img" />} */}
               <input
                 type="file"
                 accept="image/*"
@@ -64,8 +96,13 @@ const Post = (props) => {
               />
             </StPostImgBox>
             <StPostContent name="본문아이디, 텍스트 탭">
-              <StNicknameArea>아이디 들어갈 자리</StNicknameArea>
-              <StTextArea>본문 들어갈 자리</StTextArea>
+              <StNicknameArea>{data.nickname}</StNicknameArea>
+              <StContentArea
+                type="text"
+                name="content"
+                placeholder="내용을 입력해주세요"
+                onChange={onChangeContentHandler}
+              />
             </StPostContent>
           </StPostBody>
         </StPostContainer>
@@ -96,18 +133,27 @@ const LoadEffect = keyframes`
   }
 `;
 
-//모달창을 화면 중앙 최상단에 노출
+//생성 모달창을 화면 중앙 최상단에 노출
 const StPostContainer = styled.div`
-  border: 1px solid black;
   border-radius: 10px;
   width: 750px;
-  height: 545px;
   //모달창 중앙배치
   position: absolute;
   top: 50%;
   left: 56%;
   transform: translate(-50%, -50%);
-  animation: ${LoadEffect} 0.3s ease-in-out;
+  animation: ${LoadEffect} 0.4s ease-in-out;
+`;
+
+const StPostHeader = styled.div`
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  background-color: white;
+  display: flex;
+  height: 40px;
+  padding: 0 10px 0 10px;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 const StPostHeaderText = styled.div`
@@ -128,6 +174,35 @@ const StPostButton = styled.button`
   }
 `;
 
+const StPostBody = styled.div`
+  background-color: white;
+  justify-content: space-between;
+  display: flex;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+`;
+
+const StPostImgBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+  width: 500px;
+  border-bottom-left-radius: 10px;
+  input[type="file"]::file-selector-button {
+    margin-left: 65px;
+    width: 120px;
+    height: 40px;
+    background: #fafafa;
+    border-radius: 10px;
+    cursor: pointer;
+    &:hover {
+      background: rgb(192, 192, 192);
+      color: #fafafa;
+    }
+  }
+`;
+
 const StPreviewImg = styled.img`
   width: 500px;
 `;
@@ -142,44 +217,14 @@ const StImg = styled.img`
   }
 `;
 
-const StPostHeader = styled.div`
-  border-top-right-radius: 10px;
-  border-top-left-radius: 10px;
-  background-color: white;
-  display: flex;
-  height: 40px;
-  padding: 0 10px 0 10px;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const StPostBody = styled.div`
-  background-color: white;
-
-  justify-content: space-between;
-  display: flex;
-  border: 1px solid red;
-  border-bottom-right-radius: 10px;
-  border-bottom-left-radius: 10px;
-`;
-
-const StPostImgBox = styled.div`
-  border: 1px solid white;
-  height: 500px;
-  width: 500px;
-  border-bottom-left-radius: 10px;
-`;
-
 const StPostContent = styled.div`
-  border: 1px solid blue;
   border-bottom-right-radius: 10px;
-
   height: 500px;
   width: 250px;
 `;
 
 const StNicknameArea = styled.div`
-  border: 1px solid purple;
+  /* border: 1px solid purple; */
   width: 240px;
   height: 30px;
   display: flex;
@@ -188,12 +233,11 @@ const StNicknameArea = styled.div`
   font-weight: bold;
 `;
 
-const StTextArea = styled.textarea`
+const StContentArea = styled.input`
   width: 90%;
-  border: 1px solid orange;
-  height: 85%;
+  border: 1px solid white;
+  height: 45%;
   margin-top: 10px;
   font-size: 15px;
   padding: 10px;
-  resize: none;
 `;

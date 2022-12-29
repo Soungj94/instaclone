@@ -1,48 +1,28 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
 import styled from "styled-components";
-import { __postComment } from "../redux/modules/commentSlice";
-
 import Header from "../components/Home/Header";
-import PostCard from "../components/Home/PostCard";
 import Post from "../components/PostCreate/Post";
-import CardList from "../components/Home/CardList";
+import PostList from "../components/Home/PostList";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { __tokenCheck } from "../redux/modules/profileSlice";
 
 const Home = () => {
+  const dispatch = useDispatch();
   const [viewPostModal, setViewPostModal] = useState(false);
 
-  const dispatch = useDispatch();
-  const [inputC, setInputC] = useState({ comment: "" });
-  const inputChangeHandler = (e) => {
-    const { name, value } = e.target;
-    setInputC({ ...inputC, [name]: value });
-  };
-  useEffect(() => {}, [dispatch]);
-
-  const onClickInputHandler = () => {
-    dispatch(__postComment({ comment: inputC.comment }));
-  };
+  useEffect(() => {
+    dispatch(__tokenCheck());
+  }, [dispatch]);
 
   return (
     <>
       <StHome>
         <Header setViewPostModal={setViewPostModal} />
         <StPostCardList>
-          <CardList />
+          <PostList />
         </StPostCardList>
         {viewPostModal && <Post setViewPostModal={setViewPostModal} />}
-        <div>
-          <input
-            type="text"
-            name="comment"
-            placeholder="댓글 달기..."
-            onChange={inputChangeHandler}
-          ></input>
-          <button type="button" onClick={onClickInputHandler}>
-            게시
-          </button>
-        </div>
       </StHome>
     </>
   );
