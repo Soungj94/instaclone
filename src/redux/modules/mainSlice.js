@@ -244,7 +244,7 @@ const mainSlice = createSlice({
       state.posts = state.posts?.map((value, index) => {
         if (value.postId === action.payload.postId) {
           const newComment = value.comments?.map((comment, index) => {
-            if (comment.id === action.payload.commentId) {
+            if (comment.commentId === action.payload.commentId) {
               return { ...comment, id: action.payload.commentId };
             } else {
               return comment;
