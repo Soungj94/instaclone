@@ -2,23 +2,23 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { useEffect } from "react";
-import { __postComment } from "../../redux/modules/commentSlice";
+import { __postComment } from "../../redux/modules/mainSlice";
+// import { useParams } from "react-router-dom";
 
-const CommentInput = () => {
+const CommentInput = ({ id }) => {
   const dispatch = useDispatch();
+  //   const { postId } = useParams();
   const [inputC, setInputC] = useState({ comment: "" });
+
   const inputChangeHandler = (e) => {
     const { name, value } = e.target;
     setInputC({ ...inputC, [name]: value });
   };
-  useEffect(() => {}, [dispatch]);
+  //   useEffect(() => {}, [inputC]);
 
   const onClickInputHandler = () => {
-    dispatch(__postComment({ comment: inputC.comment }));
-    console.log(
-      "🚀 ~ file: Home.jsx:26 ~ onClickInputHandler ~ { comment: inputC.comment}",
-      { comment: inputC.comment, id: 1 }
-    );
+    const payload = { id, comment: inputC.comment };
+    dispatch(__postComment(payload));
   };
   return (
     <>

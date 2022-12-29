@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import CommentMain from "./CommentMain";
 import styled, { keyframes } from "styled-components";
 import { __deletePost } from "../../redux/modules/mainSlice";
 import { __tokenCheck } from "../../redux/modules/profileSlice";
@@ -46,10 +47,8 @@ const PostCard = ({ data }) => {
           {/* <StCommentImg alt="댓글 아이콘" src="img/comment_img.png" /> */}
         </StHeartImgContainer>
         <StContent>{data.content}</StContent>
-        <div name="댓글 컴포넌트 들어갈 자리">
-          댓글 컴포넌트 들어갈 자리
-          {/* <Comment /> <- 이런 식으로*/}
-        </div>
+        {/* SJ comment section */}
+        <CommentMain data={data} />
       </StPostCardBody>
     </StPostCard>
   );

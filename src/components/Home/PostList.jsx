@@ -13,6 +13,8 @@ const PostList = () => {
     dispatch(__getPosts());
   }, [dispatch]);
 
+  const { data } = useSelector((state) => state.mainSlice);
+  
   return (
     <StPostList>
       {data?.posts.map((item) => {
