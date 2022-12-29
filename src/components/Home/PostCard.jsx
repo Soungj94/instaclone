@@ -1,3 +1,4 @@
+import CommentMain from "./CommentMain";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import styled, { keyframes } from "styled-components";
@@ -44,10 +45,8 @@ const PostCard = ({ data }) => {
           {/* <StCommentImg alt="댓글 아이콘" src="img/comment_img.png" /> */}
         </StHeartImgContainer>
         <StContent>{data.content}</StContent>
-        <div name="댓글 컴포넌트 들어갈 자리">
-          댓글 컴포넌트 들어갈 자리
-          {/* <Comment /> <- 이런 식으로*/}
-        </div>
+        {/* SJ comment section */}
+        <CommentMain data={data} />
       </StPostCardBody>
     </StPostCard>
   );
