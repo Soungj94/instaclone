@@ -48,9 +48,7 @@ export const __getPosts = createAsyncThunk(
   "mainSlice/getPosts",
   async (payload, thunkAPI) => {
     try {
-      console.log("here");
       const res = await instance.get("/api/post");
-      console.log(res.data);
       return thunkAPI.fulfillWithValue(res.data.posts);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
@@ -104,6 +102,7 @@ export const __postComment = createAsyncThunk(
 export const __patchComment = createAsyncThunk(
   "mainSlice/patchComment",
   async (payload, thunkAPI) => {
+    console.log(payload);
     try {
       const res = await instance.patch(
         `/api/comment/${payload.commentId}`,
@@ -117,13 +116,7 @@ export const __patchComment = createAsyncThunk(
         }
       );
       console.log(res);
-      if (res.status === 201) {
-        const { data } = await instance.patch(
-          `/api/comment/${payload.commentId}`
-        );
-        return thunkAPI.fulfillWithValue(data.posts);
-      }
-      // return thunkAPI.fulfillWithValue(res.data);
+      return thunkAPI.fulfillWithValue(payload);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -202,7 +195,6 @@ const mainSlice = createSlice({
       state.isLoading = true;
     },
     [__getPosts.fulfilled]: (state, action) => {
-      console.log(action.payload);
       state.posts = action.payload;
     },
     [__getPosts.rejected]: (state, action) => {
@@ -241,11 +233,13 @@ const mainSlice = createSlice({
       state.isLoading = true; // 네트워크 요청이 시작되면 로딩상태를 true로 변경합니다.
     },
     [__patchComment.fulfilled]: (state, action) => {
+      console.log("qq");
       state.posts = state.posts?.map((value, index) => {
         if (value.postId === action.payload.postId) {
           const newComment = value.comments?.map((comment, index) => {
-            if (comment.id === action.payload.commentId) {
-              return { ...comment, id: action.payload.commentId };
+            if (comment.commentId === action.payload.commentId) {
+              console.log(action.payload);
+              return { ...comment, comment: action.payload.comment };
             } else {
               return comment;
             }

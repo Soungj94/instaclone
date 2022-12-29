@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { useEffect } from "react";
 import { __postComment } from "../../redux/modules/mainSlice";
+import styled from "styled-components";
 // import { useParams } from "react-router-dom";
 
 const CommentInput = ({ id }) => {
@@ -23,18 +24,32 @@ const CommentInput = ({ id }) => {
   return (
     <>
       <div>
-        <input
+        <InputInsta
           type="text"
           name="comment"
           placeholder="댓글 달기..."
           onChange={inputChangeHandler}
-        ></input>
-        <button type="button" onClick={onClickInputHandler}>
+        ></InputInsta>
+        <ButtonInsta type="button" onClick={onClickInputHandler}>
           게시
-        </button>
+        </ButtonInsta>
       </div>
     </>
   );
 };
+const InputInsta = styled.input`
+  width: 90%;
+  height: 30px;
+  border: transparent;
+  border-radius: 5px;
+`;
+
+const ButtonInsta = styled.button`
+  background-color: white;
+  border: none;
+  font-size: 14px;
+  font-weight: bold;
+  color: #0095f6;
+`;
 
 export default CommentInput;
