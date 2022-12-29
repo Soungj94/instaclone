@@ -22,18 +22,6 @@ export const __tokenCheck = createAsyncThunk(
     }
   }
 );
-// export const __getUserInfo = createAsyncThunk(
-//   "profile/getuserInfo",
-//   async (payload, thunkAPI) => {
-//     try {
-//       const { data } = await instance.get(`/api/post/${nickname}`, payload);
-
-//       return thunkAPI.fulfillWithValue(data);
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error);
-//     }
-//   }
-// );
 
 export const __getPosts = createAsyncThunk(
   "mainSlice/getPosts",
@@ -63,18 +51,6 @@ const profileSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
-    // [__getUserInfo.pending]: (state) => {
-    //   state.isLoading = true;
-    // },
-    // [__getUserInfo.fulfilled]: (state, action) => {
-    //   state.data = action.payload;
-    //   state.isLoading = false;
-    //   state.isLogin = true;
-    // },
-    // [__getUserInfo.rejected]: (state, action) => {
-    //   state.isLoading = false;
-    //   state.error = action.payload;
-    // },
     [__getPosts.pending]: (state) => {
       state.isLoading = true;
     },
