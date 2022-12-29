@@ -1,37 +1,39 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
 import { useState } from "react";
-import {
-  __deleteComment,
-  __patchComment,
-} from "../../redux/modules/commentSlice";
+import { __patchComment, __deleteComment } from "../../redux/modules/mainSlice";
 import styled from "styled-components";
 
-const CommentShown = (id, el) => {
+const CommentShown = ({ el, id }) => {
   const dispatch = useDispatch();
-  const { commentList } = useSelector((state) => state.commentPost);
 
   const [isEditing, setIsEditing] = useState(false);
 
   const [inputChange, setInputChange] = useState("");
 
-  const delClickHandler = async (id) => {
-    const bb = await dispatch(__deleteComment(id));
-    if (typeof bb.payload !== Number) {
-      alert("다른 계정의 댓글을 지울 수 없습니다");
-    }
+  const delClickHandler = (id) => {
+    const payload = {
+      postId: el.postId,
+      commentId: el.commentId,
+    };
+    dispatch(__deleteComment(payload));
+    // if (typeof bb.payload !== Number) {
+    //   alert("다른 계정의 댓글을 지울 수 없습니다");
+    // }
   };
-  const toggleEditing = (a) => {
+  const toggleEditing = () => {
     setIsEditing((prev) => !prev);
   };
-  const EditClickHandler = (ff) => {
-    dispatch(__patchComment(ff));
+  const EditClickHandler = (id) => {
+    dispatch(__patchComment(id));
   };
   return (
     <>
       <div>
-        <p>{el.content}</p>
+        <p>
+          {el.nickname}
+          {el.comment}
+        </p>
       </div>
       <div>
         {isEditing && (
@@ -48,9 +50,7 @@ const CommentShown = (id, el) => {
         )}
         <button
           type="button"
-          onClick={
-            isEditing ? toggleEditing : () => delClickHandler(el.commentId)
-          }
+          onClick={isEditing ? toggleEditing : () => delClickHandler(el)}
         >
           {isEditing ? "취소하기" : "삭제하기"}
         </button>
@@ -58,7 +58,7 @@ const CommentShown = (id, el) => {
           type="button"
           onClick={
             isEditing
-              ? () => EditClickHandler({ inputChange, id: el.commentId })
+              ? () => EditClickHandler({ inputChange, id: el })
               : toggleEditing
           }
         >

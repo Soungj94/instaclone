@@ -3,23 +3,19 @@ import styled from "styled-components";
 import Header from "../components/Home/Header";
 import Post from "../components/PostCreate/Post";
 import PostList from "../components/Home/PostList";
-import CommentInput from "../components/Home/CommentInput";
-import CommentShown from "../components/Home/CommentShown";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { __getComment } from "../redux/modules/commentSlice";
 import { useEffect } from "react";
+import { __getPosts } from "../redux/modules/mainSlice";
+import { __tokenCheck } from "../redux/modules/profileSlice";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { id } = useParams();
-  const { commentList } = useSelector((state) => state.commentPost);
-
-  //만들기(생성) 모달창 on / off
   const [viewPostModal, setViewPostModal] = useState(false);
 
+
   useEffect(() => {
-    dispatch(__getComment());
+    dispatch(__tokenCheck());
   }, [dispatch]);
 
   return (
@@ -30,16 +26,6 @@ const Home = () => {
           <PostList />
         </StPostCardList>
         {viewPostModal && <Post setViewPostModal={setViewPostModal} />}
-        <CommentInput id={id} />
-        {commentList?.map((el, i) => {
-          return (
-            <CommentShown
-              key={`main-comment-${i}`}
-              id={id}
-              el={el}
-            ></CommentShown>
-          );
-        })}
       </StHome>
     </>
   );

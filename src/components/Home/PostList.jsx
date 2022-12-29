@@ -7,15 +7,20 @@ import PostCard from "./PostCard";
 //등록된 글들을 map으로 뿌려주는 컴포넌트
 const PostList = () => {
   const dispatch = useDispatch();
-  const { data } = useSelector((state) => state.mainSlice);
+  const { posts } = useSelector((state) => state.mainSlice);
+  console.log("🚀 ~ file: PostList.jsx:11 ~ PostList ~ posts", posts);
+  // const abc = posts.
+  // console.log(abc);
+
   useEffect(() => {
+    console.log("postList");
     dispatch(__getPosts());
   }, [dispatch]);
 
   return (
     <StPostList>
-      {data?.posts.map((item) => {
-        return <PostCard key={item.postId} data={item} />;
+      {posts?.map((item) => {
+        return <PostCard key={item.postId} posts={item} />;
       })}
     </StPostList>
   );
