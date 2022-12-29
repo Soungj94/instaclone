@@ -17,9 +17,6 @@ const CommentShown = ({ el, id }) => {
       commentId: el.commentId,
     };
     dispatch(__deleteComment(payload));
-    // if (typeof bb.payload !== Number) {
-    //   alert("다른 계정의 댓글을 지울 수 없습니다");
-    // }
   };
   const toggleEditing = () => {
     setIsEditing((prev) => !prev);
@@ -31,17 +28,15 @@ const CommentShown = ({ el, id }) => {
       comment: inputChange,
     };
 
-    dispatch(__patchComment(payload)).then((res) => {
-      console.log(res);
-    });
+    dispatch(__patchComment(payload)).then((res) => {});
   };
   return (
     <>
       <div>
-        <p>
-          {el.nickname}
-          {el.comment}
-        </p>
+        <StP>
+          <StNickName>{el.nickname}</StNickName>
+          <div>{el.comment}</div>
+        </StP>
       </div>
       <div>
         {isEditing && (
@@ -76,6 +71,17 @@ const CommentShown = ({ el, id }) => {
     </>
   );
 };
+
+const StNickName = styled.div`
+  font-weight: bold;
+`;
+
+const StP = styled.div`
+  display: flex;
+  flex-direction: row;
+  padding-left: 10px;
+  gap: 10px;
+`;
 
 const UpdateCommentInput = styled.input`
   width: 100%;

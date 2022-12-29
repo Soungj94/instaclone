@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 
 const PostDetail = () => {
-  const dispatch = useDispatch();
-  const { id } = useParams();
+  // const dispatch = useDispatch();
+  // const { id } = useParams();
 
   // //나중에 프로필페이지에서 사진 누르면 디테일 모달창 띄워줄 코드
   // const [showDetailModal, setShowDetailModal] = useState(false)

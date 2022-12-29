@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import CommentMain from "./CommentMain";
 import styled, { keyframes } from "styled-components";
 import { __deletePost } from "../../redux/modules/mainSlice";
-import { __tokenCheck } from "../../redux/modules/profileSlice";
 import Update from "../Home/Update";
 
 const PostCard = ({ posts }) => {
@@ -44,10 +43,8 @@ const PostCard = ({ posts }) => {
         <StHeartImgContainer name="좋아요 댓글 이미지버튼 들어갈 자리">
           <StHeartImg alt="좋아요 아이콘" src="img/noheart_img.png" />
           <StLikeCount>{posts.likeCount}</StLikeCount>
-          {/* <StCommentImg alt="댓글 아이콘" src="img/comment_img.png" /> */}
         </StHeartImgContainer>
         <StContent>{posts.content}</StContent>
-        {/* SJ comment section */}
         <CommentMain posts={posts} />
       </StPostCardBody>
     </StPostCard>

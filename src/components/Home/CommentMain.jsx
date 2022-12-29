@@ -5,7 +5,6 @@ import CommentShown from "./CommentShown";
 const CommentMain = ({ posts }) => {
   return (
     <>
-      <CommentInput id={posts.postId} />
       {posts.comments.map((el, i) => {
         return (
           <CommentShown
@@ -15,26 +14,7 @@ const CommentMain = ({ posts }) => {
           ></CommentShown>
         );
       })}
-
-      {/* {data?.map((el, i) => {
-        return (
-          <CommentShown key={`main-comment-${i}`} postId el={el}>
-            {item.comment}
-          </CommentShown>
-        );
-      })} */}
-      {/* {mainSlice.map((el) => {
-        return el.postId === data.postId
-          ? el.comments.map((item, i) => {
-              console.log(item);
-              return (
-                <CommentShown key={`main-comment-${i}`} postId el={item}>
-                  {item.comment}
-                </CommentShown>
-              );
-            })
-          : null;
-      })} */}
+      <CommentInput id={posts.postId} />
     </>
   );
 };
