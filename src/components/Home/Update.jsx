@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import styled, { keyframes } from "styled-components";
 import { __updatePost } from "../../redux/modules/mainSlice";
 
-const Update = ({ setUpdateModal, data }) => {
+const Update = ({ setUpdateModal, posts }) => {
   const dispatch = useDispatch();
   //수정하기(업데이트) 모달창  off
   const closeUpdateModal = () => {
@@ -18,7 +18,7 @@ const Update = ({ setUpdateModal, data }) => {
 
   const updateHandler = () => {
     const payload = {
-      id: data.postId,
+      id: posts.postId,
       content: updateContent,
     };
     dispatch(__updatePost(payload));
@@ -48,14 +48,14 @@ const Update = ({ setUpdateModal, data }) => {
           </StUpdateHeader>
           <StUpdateBody name="포스트 사진, 본문 들어갈 자리">
             <StUpdateImgBox>
-              <StPreviewImg alt="업데이트박스 이미지" src={data.image} />
+              <StPreviewImg alt="업데이트박스 이미지" src={posts.image} />
             </StUpdateImgBox>
             <StUpdateContent name="본문아이디, 텍스트 탭">
-              <StNicknameArea>{data.nickname}</StNicknameArea>
+              <StNicknameArea>{posts.nickname}</StNicknameArea>
               <StTextArea
                 type="text"
                 name="updateContent"
-                defaultValue={data.content}
+                defaultValue={posts.content}
                 onChange={onChangeUpdateContentHandler}
               ></StTextArea>
             </StUpdateContent>

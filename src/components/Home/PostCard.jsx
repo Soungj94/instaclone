@@ -6,7 +6,7 @@ import { __deletePost } from "../../redux/modules/mainSlice";
 import { __tokenCheck } from "../../redux/modules/profileSlice";
 import Update from "../Home/Update";
 
-const PostCard = ({ data }) => {
+const PostCard = ({ posts }) => {
   const dispatch = useDispatch();
 
   //수정하기(업데이트) 모달창 on
@@ -22,17 +22,17 @@ const PostCard = ({ data }) => {
 
   return (
     <StPostCard name="포스트카드 전체">
-      {updateModal && <Update setUpdateModal={setUpdateModal} data={data} />}
+      {updateModal && <Update setUpdateModal={setUpdateModal} posts={posts} />}
       <StPostCardHeader name="포스트 카드 헤더">
         <StNicknameBox>
-          <StProfileImg alt="프로필 이미지" src={data.profileImg} />
-          <div>{data.nickname}</div>
+          <StProfileImg alt="프로필 이미지" src={posts.profileImg} />
+          <div>{posts.nickname}</div>
         </StNicknameBox>
         <StButtonBox>
           <StButton onClick={showUpdateModal}>수정</StButton>
           <StButton
             onClick={() => {
-              deletePostHandler(data.postId);
+              deletePostHandler(posts.postId);
             }}
           >
             삭제
@@ -40,15 +40,15 @@ const PostCard = ({ data }) => {
         </StButtonBox>
       </StPostCardHeader>
       <StPostCardBody name="포스트카드 바디">
-        <StPostImg alt="본 게시글 이미지" src={data.image} />
+        <StPostImg alt="본 게시글 이미지" src={posts.image} />
         <StHeartImgContainer name="좋아요 댓글 이미지버튼 들어갈 자리">
           <StHeartImg alt="좋아요 아이콘" src="img/noheart_img.png" />
-          <StLikeCount>{data.likeCount}</StLikeCount>
+          <StLikeCount>{posts.likeCount}</StLikeCount>
           {/* <StCommentImg alt="댓글 아이콘" src="img/comment_img.png" /> */}
         </StHeartImgContainer>
-        <StContent>{data.content}</StContent>
+        <StContent>{posts.content}</StContent>
         {/* SJ comment section */}
-        <CommentMain data={data} />
+        <CommentMain posts={posts} />
       </StPostCardBody>
     </StPostCard>
   );
