@@ -14,13 +14,11 @@ const Header = (props) => {
 
   const res = useSelector((state) => state.profileSlice.user);
   //모달창 on 하는 함수
-  //이 함수 실행하여 모달창 키면서 + dispatch로 사용자 닉네임 get 해와야함
   const showViewPostModal = () => {
     props.setViewPostModal(true);
-    // + dispatch로 사용자 닉네임 get 해와야함
   };
 
-  // 로그아웃하고 새로고침하여 홈화면에 그대로 남아있게 해주는 함수
+  //로그아웃
   const logOut = () => {
     deleteCookie("token");
     window.location.reload();
@@ -35,10 +33,7 @@ const Header = (props) => {
     <>
       <StHeaderWrap>
         <div name="menu별스타그램아이콘">
-          <StLogo
-            alt="별스타그램아이콘"
-            src="img/logo_img.png" /*onClick={() => {navigate("/")}*/
-          />
+          <StLogo alt="별스타그램아이콘" src="img/logo_img.png" />
         </div>
         <StHeadMenu>
           <StImgTextWrap name="headerwrap">

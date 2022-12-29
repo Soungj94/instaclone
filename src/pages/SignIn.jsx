@@ -32,7 +32,6 @@ const SignIn = () => {
             <img src="/img/screenshot1.gif" alt="" />
           </StImgGif>
         </StImg>
-
         <div>
           <Stbox>
             <img src="/img/logo_img.png" alt=""></img>

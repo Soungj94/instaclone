@@ -44,7 +44,6 @@ const Post = (props) => {
   const [content, setContent] = useState("");
 
   const onChangeContentHandler = (e) => {
-    // e.preventDefault();
     const value = e.target.value;
     setContent(value);
   };
@@ -87,7 +86,6 @@ const Post = (props) => {
                   <StPreviewImg key="{item.id}" src={item} alt="preview" />
                 );
               })}
-              {/* {imageSrc && <StPreviewImg src={imageSrc} alt="preview-img" />} */}
               <input
                 type="file"
                 accept="image/*"

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Header from "../components/Home/Header";
 import Post from "../components/PostCreate/Post";
 import PostList from "../components/Home/PostList";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { __tokenCheck } from "../redux/modules/profileSlice";
 
@@ -40,5 +40,4 @@ const StPostCardList = styled.div`
   display: flex;
   justify-content: flex-start;
   margin: 0 auto 0 auto;
-  /* align-items: center; */
 `;

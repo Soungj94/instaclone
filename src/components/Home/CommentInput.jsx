@@ -1,21 +1,17 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
-import { useEffect } from "react";
 import { __postComment } from "../../redux/modules/mainSlice";
 import styled from "styled-components";
-// import { useParams } from "react-router-dom";
 
 const CommentInput = ({ id }) => {
   const dispatch = useDispatch();
-  //   const { postId } = useParams();
   const [inputC, setInputC] = useState({ comment: "" });
 
   const inputChangeHandler = (e) => {
     const { name, value } = e.target;
     setInputC({ ...inputC, [name]: value });
   };
-  //   useEffect(() => {}, [inputC]);
 
   const onClickInputHandler = () => {
     const payload = { id, comment: inputC.comment };

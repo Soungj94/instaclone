@@ -1,22 +1,15 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  __tokenCheck,
-  __getUserInfo,
-  __getMyPost,
-} from "../redux/modules/profileSlice";
+import { __tokenCheck, __getMyPost } from "../redux/modules/profileSlice";
 import styled from "styled-components";
 import Header from "../components/Home/Header";
-import { useParams } from "react-router-dom";
 
 const MyPage = () => {
   const dispatch = useDispatch();
   const res = useSelector((state) => state.profileSlice.user);
-  console.log(res.data);
   // const name = res?.data.nickname;
   // const { nickname } = useParams();
   const myPosts = useSelector((state) => state.profileSlice.data);
-  console.log(myPosts.posts);
   const mine = myPosts?.posts;
 
   useEffect(() => {
